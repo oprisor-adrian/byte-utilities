@@ -12,7 +12,8 @@
 namespace ByteUtils {
 
 // The `Word` class manage and performs bitwise operations on 
-// exact 32 bits of data, treated as a single entity.
+// 'N' bits of data, treated as a single entity. The rightmost bit 
+// represents the LSB and the leftmost bit represents the MSB. 
 // Example:
 //    ByteUtils::Word word1("ffffffff");
 //    ByteUtils::Word word2("0a0a0a0a");
@@ -21,9 +22,9 @@ namespace ByteUtils {
 class Word {
   public:
     Word() = default;
-    // Initializes the `Word` object with 32 bits hexadecimal value.
-    Word(const std::string& data);
-    // Initializes the `Word` object with an array of 4 `Byte` objects.
+    // Creates a dynamic size `Word` object with given hexadecimal values.
+    Word(const std::string& hex_string, const std::size_t bits = 32);
+    // Initializes the `Word` object with an array of `Byte` objects.
     Word(const std::vector<Byte>& word);
     Word(const Word& other) = default;
     Word(Word&& other) = default;

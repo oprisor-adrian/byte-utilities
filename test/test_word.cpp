@@ -7,6 +7,15 @@
 #include "../include/byte.h"
 #include "../include/word.h"
 
+TEST(TestWord, TestHexStringConstructor) {
+  ByteUtils::Word word("1a1b1cf");
+  ::testing::internal::CaptureStdout();
+  std::cout << word;
+  std::string output = ::testing::internal::GetCapturedStdout();
+  std::string expected_output = "00000001101000011011000111001111";
+  EXPECT_STREQ(output.c_str(), expected_output.c_str());
+}
+
 TEST(TestWord, TestStdouOverloadedOperator) {
   ByteUtils::Word word("abffcdaf");
   ::testing::internal::CaptureStdout();
