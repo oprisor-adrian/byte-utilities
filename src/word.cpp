@@ -42,6 +42,10 @@ std::ostream& operator<<(std::ostream& stream, const Word& data) {
 }
 
 Word Word::operator^(const Word& word) const {
+  if (word_.size() != word.GetSize()) {
+    throw std::runtime_error("Can't perform XOR operation between words " 
+                             "with different sizes.");
+  }
   std::vector<Byte> result;
   for (std::size_t index = 0; index < 4; index++) {
     result.push_back(word_[index] ^ word.GetWord()[index]);

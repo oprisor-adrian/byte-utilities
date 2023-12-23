@@ -36,6 +36,12 @@ TEST(TestWord, TestWordXorOperation) {
   EXPECT_STREQ(output.c_str(), expected_output.c_str());
 }
 
+TEST(TestWord, TestInvalidWordXorOperation) {
+  ByteUtils::Word word1("ffffffff");
+  ByteUtils::Word word2("0a0a0a0a", 64);
+  EXPECT_THROW({ByteUtils::Word result = word1 ^ word2;}, std::runtime_error);
+}
+
 TEST(TestWord, TestWordByteXorOperation) {
   ByteUtils::Word word("ffffffff");
   ByteUtils::Byte byte(0x01);
