@@ -40,6 +40,8 @@ class Byte {
     Byte operator^(const Byte& data) const;
     // Performs bitwise `XOR` on current `Byte` object.
     Byte& operator^=(const Byte& data);
+    // Returns the complement of the current `Byte` object.
+    Byte operator~() const;
     // Performs left shift with `n_pos` positions.
     Byte operator<<(const std::size_t n_pos) const;
     // Performs left shift on current `Byte` object with `n_pos` positions.

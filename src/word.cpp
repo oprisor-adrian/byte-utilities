@@ -61,6 +61,14 @@ Word Word::operator^(const Byte& byte) const {
   return result;
 }
 
+Word Word::operator~() const {
+  ByteUtils::Word complement;
+  for (const auto& w : word_) {
+    complement.word_.push_back(~w);
+  }
+  return complement;
+}
+
 Byte Word::operator[](const std::size_t pos) const {
   if (pos >= 4 || pos < 0) {
     throw std::out_of_range("The position `pos` is out of range.");

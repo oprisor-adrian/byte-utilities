@@ -69,3 +69,12 @@ TEST(TestByte, TestToHex) {
   std::string expected_output = "ff";
   EXPECT_STREQ(output.c_str(), expected_output.c_str());
 }
+
+TEST(TestByte, TestComplementOperation) {
+  ByteUtils::Byte byte("10101010", 2);
+  ::testing::internal::CaptureStdout();
+  std::cout << ~byte;
+  std::string output = ::testing::internal::GetCapturedStdout();
+  std::string expected_output = "01010101";
+  EXPECT_STREQ(output.c_str(), expected_output.c_str());
+}

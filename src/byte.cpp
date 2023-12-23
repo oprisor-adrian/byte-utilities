@@ -49,6 +49,10 @@ Byte& Byte::operator^=(const Byte& data) {
   return *this;
 }
 
+Byte Byte::operator~() const {
+  return ~byte_;
+}
+
 Byte Byte::operator<<(const std::size_t n_pos) const {
   return byte_ << n_pos;
 }

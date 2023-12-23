@@ -80,3 +80,12 @@ TEST(TestWord, TestToHex) {
   std::string expected_output = "0aff0a0a";
   EXPECT_STREQ(output.c_str(), expected_output.c_str());
 }
+
+TEST(TestWord, TestComplementOperator) {
+  ByteUtils::Word word("ffff");
+  ::testing::internal::CaptureStdout();
+  std::cout << ~word;
+  std::string output = ::testing::internal::GetCapturedStdout();
+  std::string expected_output = "11111111111111110000000000000000";
+  EXPECT_STREQ(output.c_str(), expected_output.c_str());
+}
