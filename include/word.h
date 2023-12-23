@@ -43,6 +43,8 @@ class Word {
     Byte& operator[](const std::size_t pos);
     std::string ToHex() const;
     inline const std::vector<Byte>& GetWord() const { return word_; }
+    // Returns the size of `Word` object in bytes.
+    inline const std::size_t GetSize() const { return word_.size(); }
   private:
     std::vector<Byte> word_;
 };
