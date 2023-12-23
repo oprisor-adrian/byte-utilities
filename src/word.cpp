@@ -2,18 +2,19 @@
 
 #include <sstream>
 #include <stdexcept>
+#include <regex>
 
 namespace ByteUtils {
 
 Word::Word(const std::string& data) {
-  std::size_t hex_index = 0;
-  for (auto it = word_.begin(); it != word_.end(); ++it) {
-    *it = Byte(data.substr(hex_index, 2), 16);
-    hex_index += 2;
+  std::regex hex_regex("[0-9a-fA-F]{2}");
+  auto regex_begin = std::sregex_iterator(data.begin(), data.end(), hex_regex);
+  for (auto it=regex_begin; it!=std::sregex_iterator(); ++it) {
+    word_.push_back(Byte(it->str(), 16));
   }
 }
 
-Word::Word(const std::array<Byte, 4>& word): word_(word) {}
+Word::Word(const std::vector<Byte>& word): word_(word) {}
 
 std::ostream& operator<<(std::ostream& stream, const Word& data) {
   for (const auto& byte : data.GetWord()) {
@@ -23,17 +24,17 @@ std::ostream& operator<<(std::ostream& stream, const Word& data) {
 }
 
 Word Word::operator^(const Word& word) const {
-  std::array<Byte, 4> result;
+  std::vector<Byte> result;
   for (std::size_t index = 0; index < 4; index++) {
-    result[index] = word_[index] ^ word.GetWord()[index];
+    result.push_back(word_[index] ^ word.GetWord()[index]);
   }
   return result;
 }
 
 Word Word::operator^(const Byte& byte) const {
-  std::array<Byte, 4> result;
+  std::vector<Byte> result;
   for (std::size_t index = 0; index < 4 ; index++) {
-    result[index] = word_[index] ^ byte;
+    result.push_back(word_[index] ^ byte);
   }
   return result;
 }

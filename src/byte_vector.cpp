@@ -1,9 +1,9 @@
 #include "byte_vector.h"
 
 #include <algorithm>
-#include <array>
 #include <sstream>
 #include <stdexcept>
+#include <vector>
 #include <regex>
 
 #include "word.h"
@@ -53,9 +53,7 @@ Word ByteVector::GetWord(const std::size_t pos) const {
   if (pos >= bytes_.size()/4 || pos < 0) {
     throw std::out_of_range("The position `pos` is out of range.");
   }
-  std::array<Byte, 4> word;
-  std::vector<Byte> sub_vec(bytes_.begin()+pos*4, bytes_.begin()+pos*4+5);
-  std::copy_n(sub_vec.begin(), 4, word.begin());
+  std::vector<Byte> word(bytes_.begin()+pos*4, bytes_.begin()+pos*4+4);
   return word;
 }
 

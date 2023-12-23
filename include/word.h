@@ -1,10 +1,11 @@
 #ifndef BYTE_UTILS_WORD_H_
 #define BYTE_UTILS_WORD_H_
 
-#include <array>
 #include <cstdint>
+#include <iostream>
 #include <ostream>
 #include <string>
+#include <vector>
 
 #include "byte.h"
 
@@ -23,7 +24,7 @@ class Word {
     // Initializes the `Word` object with 32 bits hexadecimal value.
     Word(const std::string& data);
     // Initializes the `Word` object with an array of 4 `Byte` objects.
-    Word(const std::array<Byte, 4>& word);
+    Word(const std::vector<Byte>& word);
     Word(const Word& other) = default;
     Word(Word&& other) = default;
     Word& operator=(const Word& other) = default;
@@ -40,9 +41,9 @@ class Word {
     // Accesses the byte from the position `pos`.
     Byte& operator[](const std::size_t pos);
     std::string ToHex() const;
-    inline const std::array<Byte, 4>& GetWord() const { return word_; }
+    inline const std::vector<Byte>& GetWord() const { return word_; }
   private:
-    std::array<Byte, 4> word_;
+    std::vector<Byte> word_;
 };
 
 }  // namespace ByteUtils
