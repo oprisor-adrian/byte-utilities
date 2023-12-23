@@ -1,0 +1,27 @@
+cmake_minimum_required(VERSION 3.22)
+project(byte_utils)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED true)
+set(CMAKE_INSTALL_PREFIX /usr/local)
+
+add_library(_${CMAKE_PROJECT_NAME} SHARED
+  src/byte.cpp
+  src/word.cpp
+  src/byte_vector.cpp
+)
+
+target_include_directories(_${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include)
+
+install(
+  TARGETS _${CMAKE_PROJECT_NAME}
+  LIBRARY DESTINATION byte_utils
+)
+install(
+  DIRECTORY ${CMAKE_SOURCE_DIR}/include/
+  DESTINATION byte_utils/include
+  FILES_MATCHING PATTERN "*.h"
+)
+
+enable_testing()
+add_subdirectory(test/)
