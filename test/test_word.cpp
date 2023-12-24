@@ -62,6 +62,15 @@ TEST(TestWord, TestWordAndOperation) {
   EXPECT_STREQ(output.c_str(), expected_output.c_str());
 }
 
+TEST(TestWord, TestWordOrOperator) {
+  ByteUtils::Word w1("ff");
+  ByteUtils::Word w2("00");
+  ByteUtils::Word result = w1 | w2;
+  std::string output = result.ToHex();
+  std::string expected_output = "000000ff";
+  EXPECT_STREQ(output.c_str(), expected_output.c_str());
+}
+
 TEST(TestWord, TestReturnByteOperator) {
   ByteUtils::Word word("0aff0abc");
   ASSERT_THROW(word[-1], std::out_of_range);
