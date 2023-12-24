@@ -21,6 +21,19 @@ namespace ByteUtils {
 //    std::cout << result;
 class Word {
   public:
+    // The class `Iterator` defines the iterator for the `Word` class.
+    class Iterator {
+      public:
+        Iterator(std::vector<Byte>::iterator iterator): iterator_(iterator) {}
+        inline Iterator& operator++() { ++iterator_; return *this; }
+        inline Byte operator*() const { return *iterator_; }
+        inline Byte& operator*() { return *iterator_; }
+        inline bool operator!=(const Iterator& other) const { 
+          return iterator_ != other.iterator_; 
+        }
+      private:
+        std::vector<Byte>::iterator iterator_;
+    };
     Word() = default;
     // Creates a dynamic size `Word` object with given hexadecimal values.
     Word(const std::string& hex_string, const std::size_t bits = 32);
@@ -33,6 +46,10 @@ class Word {
     ~Word() = default;
     // Prints the `Word` object as an array of bits.
     friend std::ostream& operator<<(std::ostream& stream, const Word& data);
+    // Returns the `Iterator` that points to the first `byte` from the `word`.
+    Iterator begin() { return Iterator(word_.begin()); }
+    // Returns the `Iterator` that points to the last `byte` from the `word`.
+    Iterator end() { return Iterator(word_.end()); }
     // Performs the XOR operation between two `Word` objects.
     Word operator^(const Word& word) const;
     // Performs the XOR operation between `Word` and `Byte` objects.
