@@ -42,8 +42,10 @@ class Word {
         std::vector<Byte>::iterator iterator_;
     };
     Word() = default;
-    // Creates a dynamic size `Word` object with given hexadecimal values.
+    // Creates a dynamic sized `Word` object with given hexadecimal values.
     Word(const std::string& hex_string, const std::size_t bits = 32);
+    // Creates a dynamic sized `Word` object with given decimal value
+    Word(std::int64_t decimal_value, std::size_t bits = 32);
     // Initializes the `Word` object with an array of `Byte` objects.
     Word(const std::vector<Byte>& word);
     Word(const Word& other) = default;

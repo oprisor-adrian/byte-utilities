@@ -16,6 +16,15 @@ TEST(TestWord, TestHexStringConstructor) {
   EXPECT_STREQ(output.c_str(), expected_output.c_str());
 }
 
+TEST(TestWord, TestDecimalValueConstructor) {
+  ByteUtils::Word word(24, 64);
+  ::testing::internal::CaptureStdout();
+  std::cout << word;
+  std::string output = ::testing::internal::GetCapturedStdout();
+  std::string expected_output = "0000000000000000000000000000000000000000000000000000000000011000";
+  EXPECT_STREQ(output.c_str(), expected_output.c_str());
+}
+
 TEST(TestWord, TestStdouOverloadedOperator) {
   ByteUtils::Word word("abffcdaf");
   ::testing::internal::CaptureStdout();

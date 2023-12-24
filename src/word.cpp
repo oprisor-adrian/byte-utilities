@@ -32,6 +32,16 @@ Word::Word(const std::string& hex_string, const std::size_t bits) {
   }
 }
 
+Word::Word(std::int64_t decimal_value, std::size_t bits) {
+  std::vector<std::uint8_t> bytes(
+    reinterpret_cast<std::uint8_t*> (&decimal_value),
+    reinterpret_cast<std::uint8_t*> (&decimal_value) + sizeof(int64_t)
+  );
+  for (auto it = bytes.rbegin(); it != bytes.rend(); ++it) {
+    word_.push_back(Byte(*it));
+  }
+}
+
 Word::Word(const std::vector<Byte>& word): word_(word) {}
 
 std::ostream& operator<<(std::ostream& stream, const Word& data) {
