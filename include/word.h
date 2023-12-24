@@ -21,12 +21,17 @@ namespace ByteUtils {
 //    std::cout << result;
 class Word {
   public:
-    // The class `Iterator` defines the iterator for the `Word` class.
+    // The class `Iterator` provides a way to travers the word 
+    // from the MSB to the LSB.
     class Iterator {
       public:
-        Iterator(std::vector<Byte>::iterator iterator): iterator_(iterator) {}
+        Iterator(std::vector<Byte>::iterator iterator)
+            : iterator_(iterator) {}
+        // Move the index from the mostleft byte to the mostright byte. 
         inline Iterator& operator++() { ++iterator_; return *this; }
+        // Returns a constant reference to a byte from `Word` object.
         inline Byte operator*() const { return *iterator_; }
+        // Returns a reference to a byte from the `Word` object.
         inline Byte& operator*() { return *iterator_; }
         inline bool operator!=(const Iterator& other) const { 
           return iterator_ != other.iterator_; 
@@ -46,9 +51,9 @@ class Word {
     ~Word() = default;
     // Prints the `Word` object as an array of bits.
     friend std::ostream& operator<<(std::ostream& stream, const Word& data);
-    // Returns the `Iterator` that points to the first `byte` from the `word`.
+    // Returns the `Iterator` that points to the first `Byte` from the `Word`.
     Iterator begin() { return Iterator(word_.begin()); }
-    // Returns the `Iterator` that points to the last `byte` from the `word`.
+    // Returns the `Iterator` that points to the last `Byte` from the `Word`.
     Iterator end() { return Iterator(word_.end()); }
     // Performs the XOR operation between two `Word` objects.
     Word operator^(const Word& word) const;
@@ -63,9 +68,9 @@ class Word {
     // Accesses the byte from the position `pos`.
     Byte& operator[](const std::size_t pos);
     std::string ToHex() const;
-    inline const std::vector<Byte>& GetWord() const { return word_; }
     // Returns the size of `Word` object in bytes.
-    inline const std::size_t GetSize() const { return word_.size(); }
+    inline const std::size_t Size() const { return word_.size(); }
+    inline const std::vector<Byte> GetWord() const { return word_; }
   private:
     std::vector<Byte> word_;
 };

@@ -28,7 +28,7 @@ Byte::Byte(const std::string& data, const uint8_t base) {
 }
 
 std::ostream& operator<<(std::ostream& stream, const Byte& data) {
-  stream << data.GetByte();
+  stream << data.byte_;
   return stream;
 }
 
@@ -78,14 +78,12 @@ Byte Byte::operator*(const Byte& byte) const {
   Byte byte2(byte);
   while (byte2.IsAnySet()) {
     // Checks if LSB is set to `1`.
-    Byte check_lsb = byte2 & Byte(1);
-    if (check_lsb.IsAnySet()) {
+    if (byte2[0] == true) {
       result ^= byte1;
     }
     byte2 >>= 1;
     // Checks if MSB is set to `1`.
-    Byte check_msb = byte1 & Byte(0x80);
-    if (check_msb.IsAnySet()) {
+    if (byte1[7] == true) {
       byte1 <<= 1;
       // Reducing using the irreducible polynomial.
       byte1 ^= 0x1b;

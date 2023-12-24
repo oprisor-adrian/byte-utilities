@@ -83,7 +83,7 @@ class Byte {
     Byte operator*(const Byte& byte) const;
     // Returns the bit from the position `pos`.
     bool operator[](const std::size_t pos) const;
-    // Accesses the bit from the position `pos` throught 
+    // Accesses the bit from the position `pos` through 
     // `std::bitset::reference`.
     std::bitset<8>::reference operator[](const std::size_t pos);
     // Checks if at least one bit is set to `1`.

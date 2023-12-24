@@ -35,20 +35,20 @@ Word::Word(const std::string& hex_string, const std::size_t bits) {
 Word::Word(const std::vector<Byte>& word): word_(word) {}
 
 std::ostream& operator<<(std::ostream& stream, const Word& data) {
-  for (const auto& byte : data.GetWord()) {
+  for (const auto& byte : data.word_) {
     stream << byte;
   }
   return stream;
 }
 
 Word Word::operator^(const Word& word) const {
-  if (word_.size() != word.GetSize()) {
+  if (word_.size() != word.Size()) {
     throw std::runtime_error("Can't perform XOR operation between words " 
                              "with different sizes.");
   }
   std::vector<Byte> result;
   for (std::size_t index = 0; index < 4; index++) {
-    result.push_back(word_[index] ^ word.GetWord()[index]);
+    result.push_back(word_[index] ^ word.word_[index]);
   }
   return result;
 }
@@ -62,7 +62,7 @@ Word Word::operator^(const Byte& byte) const {
 }
 
 Word Word::operator&(const Word& word) const {
-  if (word_.size() != word.GetSize()) {
+  if (word_.size() != word.Size()) {
     throw std::runtime_error("Can't perform XOR operation between words " 
                              "with different sizes.");
   }
