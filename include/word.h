@@ -27,8 +27,10 @@ class Word {
       public:
         Iterator(std::vector<Byte>::iterator iterator)
             : iterator_(iterator) {}
-        // Move the index from the mostleft byte to the mostright byte. 
+        // Move the index towards LSB. 
         inline Iterator& operator++() { ++iterator_; return *this; }
+        // Move the index towards MSB.
+        inline Iterator& operator--() { --iterator_; return *this; }
         // Returns a constant reference to a byte from `Word` object.
         inline Byte operator*() const { return *iterator_; }
         // Returns a reference to a byte from the `Word` object.
@@ -54,7 +56,11 @@ class Word {
     // Returns the `Iterator` that points to the first `Byte` from the `Word`.
     Iterator begin() { return Iterator(word_.begin()); }
     // Returns the `Iterator` that points to the last `Byte` from the `Word`.
+    Iterator rbegin() { return Iterator(word_.end()); }
+    // Returns the `Iterator` that points to the last `Byte` from the `Word`.
     Iterator end() { return Iterator(word_.end()); }
+    // Returns the `Iterator` that pints to the first `Byte` from the `Word`.
+    Iterator rend() { return Iterator(word_.begin()); }
     // Performs the XOR operation between two `Word` objects.
     Word operator^(const Word& word) const;
     // Performs the XOR operation between `Word` and `Byte` objects.

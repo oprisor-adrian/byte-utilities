@@ -33,7 +33,9 @@ class Byte {
           return (*bits_)[index_]; 
         }
         // Moves the index towards the LSB.
-        Iterator& operator++() { --index_; return *this; }
+        Iterator& operator++() { ++index_; return *this; }
+        // Moves the index towards the MSB.
+        Iterator& operator--() { --index_; return *this; }
         bool operator!=(const Iterator& other) const { 
           return bits_ != other.bits_ || index_ != other.index_; 
         }
@@ -60,9 +62,13 @@ class Byte {
     friend std::ostream& operator<<(std::ostream& stream, 
                                     const std::bitset<8>::reference bit);
     // Returns a reference to the MSB.
-    Iterator begin() { return Iterator(byte_, 7); }
+    Iterator begin() { return Iterator(byte_, 0); }
     // Returns a reference to the LSB.
-    Iterator end() { return Iterator(byte_, -1); }
+    Iterator rbegin() { return Iterator(byte_, 7); }
+    // Returns a reference to the LSB.
+    Iterator end() { return Iterator(byte_, 8); }
+    // Returns a reference to the MSB.
+    Iterator rend() { return Iterator(byte_, -1); }
     // Performs bitwise `AND` operation between two `Byte` objects.
     Byte operator&(const Byte& data) const;
     // Performs bitwise `OR` operation between two `Byte` objects.
