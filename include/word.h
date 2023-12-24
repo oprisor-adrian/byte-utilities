@@ -67,6 +67,8 @@ class Word {
     Word operator^(const Byte& byte) const;
     // Performs the AND operation between two `Word` objects.
     Word operator&(const Word& word) const; 
+    // Performs the OR operation between two `Word` objects.
+    Word operator|(const Word& word) const;
     // Returns the complement of the current `Word` object.
     Word operator~() const;
     // Performs left shift bitwise operation by `n_pos` bits.
