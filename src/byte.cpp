@@ -96,6 +96,22 @@ Byte Byte::operator*(const Byte& byte) const {
   return result ;
 }
 
+bool Byte::operator[](const std::size_t pos) const {
+  if (pos > 7) {
+    throw std::out_of_range("The bit from position " + std::to_string(pos) + 
+                            " is out of range.");
+  }
+  return byte_[pos];
+}
+
+std::bitset<8>::reference Byte::operator[](const std::size_t pos) {
+  if (pos > 7) {
+    throw std::out_of_range("The bit from position " + std::to_string(pos) + 
+                            " is out of range.");
+  }
+  return byte_[pos];
+}
+
 std::string Byte::ToHex() const {
   std::stringstream stream;
   stream << std::hex << std::setw(2) << std::setfill('0') << byte_.to_ulong();

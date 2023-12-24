@@ -81,6 +81,11 @@ class Byte {
     Byte& operator>>=(const std::size_t n_pos);
     // Performs Galois Field multiplication between two `Byte` objects.
     Byte operator*(const Byte& byte) const;
+    // Returns the bit from the position `pos`.
+    bool operator[](const std::size_t pos) const;
+    // Accesses the bit from the position `pos` throught 
+    // `std::bitset::reference`.
+    std::bitset<8>::reference operator[](const std::size_t pos);
     // Checks if at least one bit is set to `1`.
     inline bool IsAnySet() const { return byte_.any(); }
     inline int ToInt() const { return byte_.to_ulong(); }
