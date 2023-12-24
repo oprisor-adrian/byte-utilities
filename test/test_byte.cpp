@@ -86,6 +86,14 @@ TEST(TestByte, TestIterator) {
     std::cout << bit;
   }
   std::string output = ::testing::internal::GetCapturedStdout();
-  std::string expected_output = "10101010";
-  EXPECT_STREQ(output.c_str(), expected_output.c_str());
+  std::string expected_output = "01010101";
+  ASSERT_STREQ(output.c_str(), expected_output.c_str());
+
+  ::testing::internal::CaptureStdout();
+  for (auto it = byte.rbegin(); it != byte.rend(); --it) {
+    std::cout << (*it);
+  }
+  output = ::testing::internal::GetCapturedStdout();
+  expected_output = "10101010";
+  ASSERT_STREQ(output.c_str(), expected_output.c_str());
 }
