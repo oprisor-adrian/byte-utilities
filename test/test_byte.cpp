@@ -78,3 +78,14 @@ TEST(TestByte, TestComplementOperation) {
   std::string expected_output = "01010101";
   EXPECT_STREQ(output.c_str(), expected_output.c_str());
 }
+
+TEST(TestByte, TestIterator) {
+  ByteUtils::Byte byte("10101010", 2);
+  ::testing::internal::CaptureStdout();
+  for (const auto& bit : byte) {
+    std::cout << bit;
+  }
+  std::string output = ::testing::internal::GetCapturedStdout();
+  std::string expected_output = "10101010";
+  EXPECT_STREQ(output.c_str(), expected_output.c_str());
+}

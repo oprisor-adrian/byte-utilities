@@ -32,6 +32,11 @@ std::ostream& operator<<(std::ostream& stream, const Byte& data) {
   return stream;
 }
 
+std::ostream& operator<<(std::ostream& stream, const std::bitset<8>::reference bit) {
+  stream << static_cast<bool>(bit);
+  return stream;
+}
+
 Byte Byte::operator&(const Byte& data) const {
   return byte_ & data.byte_;
 }
