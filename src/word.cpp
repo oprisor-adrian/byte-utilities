@@ -81,6 +81,38 @@ Word Word::operator~() const {
   return complement;
 }
 
+Word Word::operator<<(std::size_t n_pos) const {
+  Word word = *this;
+  for (std::size_t index = 0; index < n_pos; index++) {
+    bool carry = false;
+    for (auto byte = word.rbegin(); byte != word.rend(); --byte) {
+      bool new_carry = (*byte)[7];
+      (*byte) <<= 1;
+      if (carry) {
+        (*byte)[0] = 1;
+      }
+      carry = new_carry;
+    }
+  }
+  return word;
+}
+
+Word Word::operator>>(std::size_t n_pos) const {
+  Word word = *this;
+  for (std::size_t index = 0; index < n_pos; index++) {
+    bool carry = false;
+    for (auto& byte : word) {
+      bool new_carry = byte[0];
+      byte >>= 1;
+      if (carry) {
+        byte[7] = 1;
+      }
+      carry = new_carry;
+    }
+  }
+  return word;
+}
+
 Byte Word::operator[](const std::size_t pos) const {
   if (pos >= 4 || pos < 0) {
     throw std::out_of_range("The position `pos` is out of range.");

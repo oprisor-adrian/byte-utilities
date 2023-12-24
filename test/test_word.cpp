@@ -125,3 +125,19 @@ TEST(TestWord, TestIterator) {
   std::string expected_output_mod = "11111111";
   ASSERT_STREQ(output.c_str(), expected_output_mod.c_str());
 }
+
+TEST(TestWord, TestLeftShiftOperator) {
+  ByteUtils::Word word("ff");
+  ByteUtils::Word result = word << 1;
+  std::string output = result.ToHex();
+  std::string expected_output = "000001fe";
+  EXPECT_STREQ(output.c_str(), expected_output.c_str());
+}
+
+TEST(TestWord, TestRightShiftOperator) {
+  ByteUtils::Word word("ff");
+  ByteUtils::Word result = word >> 1;
+  std::string output = result.ToHex();
+  std::string expected_output = "0000007f";
+  EXPECT_STREQ(output.c_str(), expected_output.c_str());
+}

@@ -69,6 +69,10 @@ class Word {
     Word operator&(const Word& word) const; 
     // Returns the complement of the current `Word` object.
     Word operator~() const;
+    // Performs left shift bitwise operation by `n_pos` bits.
+    Word operator<<(std::size_t n_pos) const;
+    // Performs right shift bitwise operation by `n_pos` bits.
+    Word operator>>(std::size_t n_pos) const;
     // Returns a byte from position `pos`.
     Byte operator[](const std::size_t pos) const;
     // Accesses the byte from the position `pos`.
