@@ -54,6 +54,8 @@ class Word {
     Word operator^(const Word& word) const;
     // Performs the XOR operation between `Word` and `Byte` objects.
     Word operator^(const Byte& byte) const;
+    // Performs the AND operation between two `Word` objects.
+    Word operator&(const Word& word) const; 
     // Returns the complement of the current `Word` object.
     Word operator~() const;
     // Returns a byte from position `pos`.

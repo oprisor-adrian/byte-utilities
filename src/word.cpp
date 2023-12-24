@@ -61,6 +61,18 @@ Word Word::operator^(const Byte& byte) const {
   return result;
 }
 
+Word Word::operator&(const Word& word) const {
+  if (word_.size() != word.GetSize()) {
+    throw std::runtime_error("Can't perform XOR operation between words " 
+                             "with different sizes.");
+  }
+  std::vector<Byte> result;
+  for (std::size_t index = 0; index < word_.size(); index++) {
+    result.push_back(word_[index] & word[index]);
+  }
+  return result;
+}
+
 Word Word::operator~() const {
   ByteUtils::Word complement;
   for (const auto& w : word_) {
