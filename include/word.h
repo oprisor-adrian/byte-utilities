@@ -21,8 +21,8 @@ namespace ByteUtils {
 //    std::cout << result;
 class Word {
   public:
-    // The class `Iterator` provides a way to travers the word 
-    // from the MSB to the LSB.
+    // The class `Iterator` class provides a mechanism 
+    // to traverse a `Word` instance.
     class Iterator {
       public:
         Iterator(std::vector<Byte>::iterator iterator)
@@ -41,8 +41,8 @@ class Word {
       private:
         std::vector<Byte>::iterator iterator_;
     };
-    // The class `ReverseIterator` provides a way to travers the word
-    // from the LSB to the MSB.
+    // The class `ReverseIterator` class provides a mechanism 
+    // to traverse a `Word` instance in reverse order.
     class ReverseIterator {
       public:
         ReverseIterator(std::vector<Byte>::iterator iterator)
@@ -77,12 +77,14 @@ class Word {
     friend std::ostream& operator<<(std::ostream& stream, const Word& data);
     // Returns the `Iterator` that points to the first `Byte` from the `Word`.
     Iterator begin() { return Iterator(word_.begin()); }
-    // Returns the `Iterator` that points to the last `Byte` from the `Word`.
-    ReverseIterator rbegin() { return ReverseIterator(word_.end()); }
+    // Returns the `ReverseIterator` that points to the last 
+    // `Byte` from the `Word`.
+    ReverseIterator rbegin() { return ReverseIterator(word_.end()-1); }
     // Returns the `Iterator` that points to the last `Byte` from the `Word`.
     Iterator end() { return Iterator(word_.end()); }
-    // Returns the `Iterator` that pints to the first `Byte` from the `Word`.
-    ReverseIterator rend() { return ReverseIterator(word_.begin()); }
+    // Returns the `ReverseIterator` that points to the first 
+    // `Byte` from the `Word`.
+    ReverseIterator rend() { return ReverseIterator(word_.begin()-1); }
     // Performs the XOR operation between two `Word` objects.
     Word operator^(const Word& word) const;
     // Performs the XOR operation between `Word` and `Byte` objects.

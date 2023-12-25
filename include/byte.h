@@ -18,8 +18,8 @@ namespace ByteUtils {
 //     std::cout << result;
 class Byte {
   public:
-    // The class `Iterator` provides a way to travers the bits 
-    // from the MSB to the LSB.
+    // The class `Iterator` class provides a mechanism 
+    // to traverse a `Byte` instance.
     class Iterator {
       public:
         Iterator(std::bitset<8>& bits, const std::size_t index)
@@ -43,8 +43,8 @@ class Byte {
         std::bitset<8>* bits_;
         std::size_t index_;
     };
-    // The class `ReverseInterator` provides a way to travers the bits
-    // from the LSB to the MSB.
+    // The class `ReverseIterator` class provides a mechanism 
+    // to traverse a `Byte` instance in reverse order.
     class ReverseIterator {
       public:
         ReverseIterator(std::bitset<8>& bits, std::size_t index)
