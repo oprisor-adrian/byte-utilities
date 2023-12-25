@@ -65,3 +65,31 @@ TEST(TestByteWord, TestGetWordVector) {
   std::string expected_output = "0405060708090a0b";
   EXPECT_STREQ(output.c_str(), expected_output.c_str());
 }
+
+TEST(TestByteVector, TestIterator) {
+  ByteUtils::ByteVector bytes("0a1b");
+  for (auto& byte : bytes) {
+    byte = ByteUtils::Byte(0x1b);
+  }
+  std::string output = bytes.ToHex();
+  std::string expected_output = "1b1b";
+  ASSERT_STREQ(output.c_str(), expected_output.c_str());
+
+  ::testing::internal::CaptureStdout();
+  for (auto it = bytes.begin(); it != bytes.end(); ++it) {
+    std::cout << it->ToHex();
+  }
+  output = ::testing::internal::GetCapturedStdout();
+  ASSERT_STREQ(output.c_str(), expected_output.c_str());
+}
+
+TEST(TestByteVector, TestReverseIterator) {
+  ByteUtils::ByteVector bytes("0a1b");
+  ::testing::internal::CaptureStdout();
+  for (auto it = bytes.rbegin(); it != bytes.rend(); ++it) {
+    std::cout << it->ToHex();
+  }
+  std::string output = ::testing::internal::GetCapturedStdout();
+  std::string expected_output = "1b0a";
+  ASSERT_STREQ(output.c_str(), expected_output.c_str());
+}
