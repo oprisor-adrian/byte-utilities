@@ -118,30 +118,32 @@ TEST(TestWord, TestComplementOperator) {
 }
 
 TEST(TestWord, TestIterator) {
-  std::string output = "";
-  std::string expected_output = "0000ffff";;
   ByteUtils::Word word("ffff");
   ::testing::internal::CaptureStdout();
   for (const auto& byte : word) {
     std::cout << byte.ToHex();
   }
-  output = ::testing::internal::GetCapturedStdout();
+  std::string expected_output = "0000ffff";;
+  std::string output = ::testing::internal::GetCapturedStdout();
   ASSERT_STREQ(output.c_str(), expected_output.c_str());
 
-  ::testing::internal::CaptureStdout();
   for (auto it = word.begin(); it != word.end(); ++it) {
-    std::cout << (*it).ToHex();
-  }
-  output = ::testing::internal::GetCapturedStdout();
-  ASSERT_STREQ(output.c_str(), expected_output.c_str());
-
-  ::testing::internal::CaptureStdout();
-  for (auto& byte : word) {
-    byte = ByteUtils::Byte(0x11);
+    *it = ByteUtils::Byte(0x80);
   }
   output = word.ToHex();
-  std::string expected_output_mod = "11111111";
-  ASSERT_STREQ(output.c_str(), expected_output_mod.c_str());
+  expected_output = "80808080";
+  ASSERT_STREQ(output.c_str(), expected_output.c_str());
+}
+
+TEST(TestWord, TestReverseIterator) {
+  ByteUtils::Word word("ffff");
+  ::testing::internal::CaptureStdout();
+  for (auto it = word.rbegin(); it != word.rend(); ++it) {
+    std::cout << (*it).ToHex();
+  }
+  std::string output = ::testing::internal::GetCapturedStdout();
+  std::string expected_output = "ffff0000";
+  EXPECT_STREQ(output.c_str(), expected_output.c_str());
 }
 
 TEST(TestWord, TestLeftShiftOperator) {
