@@ -41,6 +41,26 @@ class Word {
       private:
         std::vector<Byte>::iterator iterator_;
     };
+    // The class `ReverseIterator` provides a way to travers the word
+    // from the LSB to the MSB.
+    class ReverseIterator {
+      public:
+        ReverseIterator(std::vector<Byte>::iterator iterator)
+            : iterator_(iterator) {}
+        // Move the index towards MSB. 
+        inline ReverseIterator& operator++() { --iterator_; return *this; }
+        // Move the index towards LSB.
+        inline ReverseIterator& operator--() { ++iterator_; return *this; }
+        // Returns a constant reference to a byte from `Word` object.
+        inline Byte operator*() const { return *iterator_; }
+        // Returns a reference to a byte from the `Word` object.
+        inline Byte& operator*() { return *iterator_; }
+        inline bool operator!=(const ReverseIterator& other) const { 
+          return iterator_ != other.iterator_; 
+        }
+      private:
+        std::vector<Byte>::iterator iterator_;
+    };
     Word() = default;
     // Creates a dynamic sized `Word` object with given hexadecimal values.
     Word(const std::string& hex_string, const std::size_t bits = 32);
@@ -58,11 +78,11 @@ class Word {
     // Returns the `Iterator` that points to the first `Byte` from the `Word`.
     Iterator begin() { return Iterator(word_.begin()); }
     // Returns the `Iterator` that points to the last `Byte` from the `Word`.
-    Iterator rbegin() { return Iterator(word_.end()); }
+    ReverseIterator rbegin() { return ReverseIterator(word_.end()); }
     // Returns the `Iterator` that points to the last `Byte` from the `Word`.
     Iterator end() { return Iterator(word_.end()); }
     // Returns the `Iterator` that pints to the first `Byte` from the `Word`.
-    Iterator rend() { return Iterator(word_.begin()); }
+    ReverseIterator rend() { return ReverseIterator(word_.begin()); }
     // Performs the XOR operation between two `Word` objects.
     Word operator^(const Word& word) const;
     // Performs the XOR operation between `Word` and `Byte` objects.
