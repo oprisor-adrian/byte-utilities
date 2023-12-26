@@ -25,41 +25,43 @@ class Word {
     // to traverse a `Word` instance.
     class Iterator {
       public:
-        Iterator(std::vector<Byte>::iterator iterator)
-            : iterator_(iterator) {}
+        Iterator(std::vector<Byte>& word, std::size_t index)
+            : word_(&word), index_(index) {}
         // Move the index towards LSB. 
-        inline Iterator& operator++() { ++iterator_; return *this; }
+        inline Iterator& operator++() { ++index_; return *this; }
         // Move the index towards MSB.
-        inline Iterator& operator--() { --iterator_; return *this; }
-        // Returns a constant reference to a byte from `Word` object.
-        inline Byte operator*() const { return *iterator_; }
+        inline Iterator& operator--() { --index_; return *this; }
         // Returns a reference to a byte from the `Word` object.
-        inline Byte& operator*() { return *iterator_; }
+        inline Byte& operator*() { return (*word_)[index_]; }
+        // Returns a pointer to a byte from the `Word` object.
+        inline Byte* operator->() { return &(*word_)[index_]; }
         inline bool operator!=(const Iterator& other) const { 
-          return iterator_ != other.iterator_; 
+          return word_ != other.word_ || index_ != other.index_; 
         }
       private:
-        std::vector<Byte>::iterator iterator_;
+        std::vector<Byte>* word_;
+        std::size_t index_;
     };
     // The class `ReverseIterator` class provides a mechanism 
     // to traverse a `Word` instance in reverse order.
     class ReverseIterator {
       public:
-        ReverseIterator(std::vector<Byte>::iterator iterator)
-            : iterator_(iterator) {}
+        ReverseIterator(std::vector<Byte>& word, std::size_t index)
+            : word_(&word), index_(index) {}
         // Move the index towards MSB. 
-        inline ReverseIterator& operator++() { --iterator_; return *this; }
+        inline ReverseIterator& operator++() { --index_; return *this; }
         // Move the index towards LSB.
-        inline ReverseIterator& operator--() { ++iterator_; return *this; }
-        // Returns a constant reference to a byte from `Word` object.
-        inline Byte operator*() const { return *iterator_; }
+        inline ReverseIterator& operator--() { ++index_; return *this; }
         // Returns a reference to a byte from the `Word` object.
-        inline Byte& operator*() { return *iterator_; }
+        inline Byte& operator*() { return (*word_)[index_]; }
+        // Returns a pointer to a byte from the `Word` object.
+        inline Byte* operator->() { return &(*word_)[index_]; }
         inline bool operator!=(const ReverseIterator& other) const { 
-          return iterator_ != other.iterator_; 
+          return word_ != other.word_ || index_ != other.index_; 
         }
       private:
-        std::vector<Byte>::iterator iterator_;
+        std::vector<Byte>* word_;
+        std::size_t index_;
     };
     Word() = default;
     // Creates a dynamic sized `Word` object with given hexadecimal values.
@@ -76,15 +78,15 @@ class Word {
     // Prints the `Word` object as an array of bits.
     friend std::ostream& operator<<(std::ostream& stream, const Word& data);
     // Returns the `Iterator` that points to the first `Byte` from the `Word`.
-    Iterator begin() { return Iterator(word_.begin()); }
+    Iterator begin() { return Iterator(word_, 0); }
     // Returns the `ReverseIterator` that points to the last 
     // `Byte` from the `Word`.
-    ReverseIterator rbegin() { return ReverseIterator(word_.end()-1); }
+    ReverseIterator rbegin() { return ReverseIterator(word_, word_.size()-1); }
     // Returns the `Iterator` that points to the last `Byte` from the `Word`.
-    Iterator end() { return Iterator(word_.end()); }
+    Iterator end() { return Iterator(word_, word_.size()); }
     // Returns the `ReverseIterator` that points to the first 
     // `Byte` from the `Word`.
-    ReverseIterator rend() { return ReverseIterator(word_.begin()-1); }
+    ReverseIterator rend() { return ReverseIterator(word_, -1); }
     // Performs the XOR operation between two `Word` objects.
     Word operator^(const Word& word) const;
     // Performs the XOR operation between `Word` and `Byte` objects.

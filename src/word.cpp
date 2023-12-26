@@ -17,7 +17,7 @@ Word::Word(const std::string& hex_string, const std::size_t bits) {
                  " truncated."; 
     hex_values.substr(0, bytes_2_represent * 2);
   }
-  // Completes the odd %hex_string size.
+  // Adds '0' if %hex_values has incomplete hex value.
   std::size_t input_bits_size = hex_values.length() * 4;
   if ((bits - input_bits_size) % 8 != 0) {
     hex_values.insert(0, "0");

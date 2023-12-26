@@ -11,12 +11,19 @@
 namespace ByteUtils {
 
 ByteVector::ByteVector(const std::string& hex_string) {
+  std::size_t bits_2_represent = hex_string.size() * 4;
+  std::string hex_values = hex_string;
+  // Checks for incomplete hexadecimal values.
+  if (bits_2_represent % 8 != 0) {
+    hex_values.insert(0, "0");
+  }
+  // Represents the %hex_values as binary.
   std::regex hex_regex("[0-9a-fA-F]{2}");
-  auto regex_begin = std::sregex_iterator(hex_string.begin(), 
-                                          hex_string.end(), 
+  auto regex_begin = std::sregex_iterator(hex_values.begin(), 
+                                          hex_values.end(), 
                                           hex_regex);
   for (auto it=regex_begin; it!=std::sregex_iterator(); ++it) {
-    bytes_.push_back(Byte(it->str(), 16));
+    bytes_.emplace_back(it->str(), 16);
   }
 }
 
@@ -30,14 +37,14 @@ std::ostream& operator<<(std::ostream& stream, const ByteVector& bytes) {
 }
 
 Byte ByteVector::operator[](const std::size_t pos) const {
-  if (pos >= bytes_.size() || pos < 0) {
+  if (pos >= bytes_.size()) {
     throw std::out_of_range("The position `pos` is out of range.");
   }
   return bytes_[pos];
 }
 
 Byte& ByteVector::operator[](const std::size_t pos) {
-  if (pos >= bytes_.size() || pos < 0) {
+  if (pos >= bytes_.size()) {
     throw std::out_of_range("The position `pos` is out of range.");
   }
   return bytes_[pos];
@@ -45,7 +52,7 @@ Byte& ByteVector::operator[](const std::size_t pos) {
 
 void ByteVector::PushBack(const Word& word) {
   for (const auto& byte : word.GetWord()) {
-    bytes_.push_back(byte);
+    bytes_.emplace_back(byte);
   }
 }
 
