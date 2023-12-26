@@ -104,7 +104,8 @@ class Word {
         const std::vector<Byte>* word_;
         std::size_t index_;
     };
-    Word() = default;
+    // Creates an empty `Word` object with `N` bits.
+    Word(std::size_t bits = 32);
     // Creates a dynamic sized `Word` object with given hexadecimal values.
     Word(const std::string& hex_string, const std::size_t bits = 32);
     // Creates a dynamic sized `Word` object with given decimal value
@@ -162,6 +163,8 @@ class Word {
     Byte operator[](const std::size_t pos) const;
     // Accesses the byte from the position `pos`.
     Byte& operator[](const std::size_t pos);
+    // Pushes back a `Byte` object.
+    void PushBack(const Byte& byte);
     std::string ToHex() const;
     // Returns the size of `Word` object in bytes.
     inline const std::size_t Size() const { return word_.size(); }

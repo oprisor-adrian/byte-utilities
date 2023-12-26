@@ -7,6 +7,11 @@
 
 namespace ByteUtils {
 
+Word::Word(std::size_t bits) {
+  std::size_t bytes_2_represent = (bits + 7) / 8;
+  word_.reserve(bytes_2_represent);
+}
+
 Word::Word(const std::string& hex_string, const std::size_t bits) {
   std::string hex_values = hex_string;
   // Rounds up to nearest byte. 
@@ -161,6 +166,15 @@ Byte& Word::operator[](const std::size_t pos) {
     throw std::out_of_range("The position `pos` is out of range.");
   }
   return word_[pos];
+}
+
+void Word::PushBack(const Byte& byte) {
+  // Checks if %word_ object is full.
+  if (word_.size() == word_.capacity()) {
+    throw std::runtime_error("Operation can't be made: exceeds the" 
+                             " Word object capacity.");
+  }
+  word_.push_back(byte);
 }
 
 std::string Word::ToHex() const {
