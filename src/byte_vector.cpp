@@ -13,7 +13,7 @@ namespace ByteUtils {
 ByteVector::ByteVector(const std::string& hex_string) {
   std::size_t bits_2_represent = hex_string.size() * 4;
   std::string hex_values = hex_string;
-  // Checks for incomplete hexadecimal values.
+  // Checks for incomplete hexadecimal value.
   if (bits_2_represent % 8 != 0) {
     hex_values.insert(0, "0");
   }
@@ -30,7 +30,7 @@ ByteVector::ByteVector(const std::string& hex_string) {
 ByteVector::ByteVector(const std::vector<Byte>& bytes): bytes_(bytes) {}
 
 std::ostream& operator<<(std::ostream& stream, const ByteVector& bytes) {
-  for (const auto& byte : bytes.bytes_) {
+  for (const auto& byte : bytes) {
     stream << byte;
   }
   return stream;
@@ -51,13 +51,13 @@ Byte& ByteVector::operator[](const std::size_t pos) {
 }
 
 void ByteVector::PushBack(const Word& word) {
-  for (const auto& byte : word.GetWord()) {
+  for (const auto& byte : word) {
     bytes_.emplace_back(byte);
   }
 }
 
 Word ByteVector::GetWord(const std::size_t pos) const {
-  if (pos >= bytes_.size()/4 || pos < 0) {
+  if (pos >= bytes_.size()/4) {
     throw std::out_of_range("The position `pos` is out of range.");
   }
   std::vector<Byte> word(bytes_.begin()+pos*4, bytes_.begin()+pos*4+4);
@@ -68,7 +68,7 @@ std::vector<Word> ByteVector::GetWord(const std::size_t pos,
                                       const std::size_t count) const {
   std::vector<Word> words;
   for (std::size_t index = 0; index < count; index++) {
-    words.push_back(GetWord(pos+index));
+    words.emplace_back(GetWord(pos+index));
   }
   return words;
 }

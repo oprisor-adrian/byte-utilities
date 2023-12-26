@@ -2,7 +2,6 @@
 #define BYTE_UTILS_WORD_H_
 
 #include <cstdint>
-#include <iostream>
 #include <ostream>
 #include <string>
 #include <vector>

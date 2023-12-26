@@ -1,5 +1,6 @@
 #include "word.h"
 
+#include <iostream>
 #include <regex>
 #include <sstream>
 #include <stdexcept>
