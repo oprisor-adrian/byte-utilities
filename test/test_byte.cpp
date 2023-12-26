@@ -69,3 +69,43 @@ TEST(TestByte, TestToHex) {
   std::string expected_output = "ff";
   EXPECT_STREQ(output.c_str(), expected_output.c_str());
 }
+
+TEST(TestByte, TestComplementOperation) {
+  ByteUtils::Byte byte("10101010", 2);
+  ::testing::internal::CaptureStdout();
+  std::cout << ~byte;
+  std::string output = ::testing::internal::GetCapturedStdout();
+  std::string expected_output = "01010101";
+  EXPECT_STREQ(output.c_str(), expected_output.c_str());
+}
+
+TEST(TestByte, TestIterator) {
+  ByteUtils::Byte byte("10101010", 2);
+  ::testing::internal::CaptureStdout();
+  for (const auto& bit : byte) {
+    std::cout << bit;
+  }
+  std::string output = ::testing::internal::GetCapturedStdout();
+  std::string expected_output = "01010101";
+  ASSERT_STREQ(output.c_str(), expected_output.c_str());
+
+  for (auto it = byte.begin(); it != byte.end(); ++it) {
+    *it = 1;
+  }
+  ::testing::internal::CaptureStdout();
+  std::cout << byte;
+  output = ::testing::internal::GetCapturedStdout();
+  expected_output = "11111111";
+  ASSERT_STREQ(output.c_str(), expected_output.c_str());
+}
+
+TEST(TestByte, TestReverseIterator) {
+  ByteUtils::Byte byte("10101010", 2);
+  ::testing::internal::CaptureStdout();
+  for (auto it = byte.rbegin(); it != byte.rend(); ++it) {
+    std::cout << *it;
+  }
+  std::string output = ::testing::internal::GetCapturedStdout();
+  std::string  expected_output = "10101010";
+  ASSERT_STREQ(output.c_str(), expected_output.c_str());
+}
