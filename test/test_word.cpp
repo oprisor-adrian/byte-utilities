@@ -161,3 +161,25 @@ TEST(TestWord, TestRightShiftOperator) {
   std::string expected_output = "0000007f";
   EXPECT_STREQ(output.c_str(), expected_output.c_str());
 }
+
+TEST(TestWord, TestConstIterator) {
+  const ByteUtils::Word word("ffff");
+  ::testing::internal::CaptureStdout();
+  for (const auto& byte : word) {
+    std::cout << byte.ToHex();
+  }
+  std::string expected_output = "0000ffff";;
+  std::string output = ::testing::internal::GetCapturedStdout();
+  ASSERT_STREQ(output.c_str(), expected_output.c_str());
+}
+
+TEST(TestWord, TestConstReverseIterator) {
+  const ByteUtils::Word word("ffff");
+  ::testing::internal::CaptureStdout();
+  for (auto it = word.rbegin(); it != word.rend(); ++it) {
+    std::cout << (*it).ToHex();
+  }
+  std::string output = ::testing::internal::GetCapturedStdout();
+  std::string expected_output = "ffff0000";
+  EXPECT_STREQ(output.c_str(), expected_output.c_str());
+}

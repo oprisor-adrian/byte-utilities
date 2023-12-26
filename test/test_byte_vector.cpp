@@ -93,3 +93,25 @@ TEST(TestByteVector, TestReverseIterator) {
   std::string expected_output = "1b0a";
   ASSERT_STREQ(output.c_str(), expected_output.c_str());
 }
+
+TEST(TestByteVector, TestConstIterator) {
+  const ByteUtils::ByteVector bytes("0a1b");
+  ::testing::internal::CaptureStdout();
+  for (const auto& byte : bytes) {
+    std::cout << byte.ToHex();
+  }
+  std::string output = ::testing::internal::GetCapturedStdout();
+  std::string expected_output = "0a1b";
+  ASSERT_STREQ(output.c_str(), expected_output.c_str());
+}
+
+TEST(TestByteVector, TestConstReverseIterator) {
+  const ByteUtils::ByteVector bytes("0a1b");
+  ::testing::internal::CaptureStdout();
+  for (auto it = bytes.rbegin(); it != bytes.rend(); ++it) {
+    std::cout << it->ToHex();
+  }
+  std::string output = ::testing::internal::GetCapturedStdout();
+  std::string expected_output = "1b0a";
+  ASSERT_STREQ(output.c_str(), expected_output.c_str());
+}
