@@ -17,7 +17,7 @@ class Word;
 //    std::cout << bytes[0];
 class ByteVector{
   public:
-    // The class `Iterator` class provides a mechanism 
+    // The class `Iterator` provides a mechanism 
     // to traverse a `ByteVector` instance.
     class Iterator {
       public:
@@ -38,7 +38,28 @@ class ByteVector{
         std::vector<Byte>* bytes_;
         std::size_t index_;
     };
-    // The class `ReverseIterator` class provides a mechanism 
+    // The class `ConstIterator` provides a mechanism 
+    // to travers a `const ByteVector` instance.
+    class ConstIterator {
+      public:
+        ConstIterator(const std::vector<Byte>& bytes, std::size_t index)
+            : bytes_(&bytes), index_(index) {}
+        // Moves the index towards LSB. 
+        inline ConstIterator& operator++() { ++index_; return *this; }
+        // Moves the index towards MSB.
+        inline ConstIterator& operator--() { --index_; return *this; }
+        // Returns a reference to a `Byte~ from the `ByteVector` object.
+        inline const Byte& operator*() const { return (*bytes_)[index_]; }
+        // Returns a pointer to a `Byte` from `ByteVector` object.
+        inline const Byte* operator->() const { return &(*bytes_)[index_]; }
+        inline bool operator!=(const ConstIterator& other) const { 
+          return bytes_ != other.bytes_ || index_ != other.index_; 
+        }
+      private:
+        const std::vector<Byte>* bytes_;
+        std::size_t index_;
+    };
+    // The class `ReverseIterator` provides a mechanism 
     // to traverse a `ByteVector` instance in reverse order.
     class ReverseIterator {
       public:
@@ -59,6 +80,27 @@ class ByteVector{
         std::vector<Byte>* bytes_;
         std::size_t index_;
     };
+    // The class `ConstReverseIterator` provides a mechanism
+    // to travers a `const ByteVector` instance in reverse order.
+    class ConstReverseIterator {
+      public:
+        ConstReverseIterator(const std::vector<Byte>& bytes, std::size_t index)
+            : bytes_(&bytes), index_(index) {}
+         // Moves the index towards MSB. 
+        inline ConstReverseIterator& operator++() { --index_; return *this; }
+        // Moves the index towards LSB.
+        inline ConstReverseIterator& operator--() { ++index_; return *this; }
+        // Returns a reference to a byte from the `Word` object.
+        inline const Byte& operator*() const { return (*bytes_)[index_]; }
+        // Returns a pointer to a `Byte` from `ByteVector` object.
+        inline const Byte* operator->() const { return &(*bytes_)[index_]; }
+        inline bool operator!=(const ConstReverseIterator& other) const {
+          return bytes_ != other.bytes_ || index_ != other.index_; 
+        }
+      private:
+        const std::vector<Byte>* bytes_;
+        std::size_t index_;
+    };
     ByteVector() = default;
     // Initializes the `ByteVector` object with a string of hexadecimal values.
     ByteVector(const std::string& hex_string);
@@ -75,15 +117,31 @@ class ByteVector{
     // Returns the `Iterator` that points to the first `Byte` 
     // from the `ByteVector`.
     Iterator begin() { return Iterator(bytes_, 0); }
+    // Returns the `ConstIterator` that poinst to the first `Byte`
+    // from the `const ByteVector`
+    ConstIterator begin() const { return ConstIterator(bytes_, 0); }
     // Returns the `ReverseIterator` that points to the last 
     // `Byte` from the `ByteVector`.
     ReverseIterator rbegin() { return ReverseIterator(bytes_, bytes_.size()-1); }
+    // Returns the `ConstReverseIterator` that points to the last
+    // `Byte` from the `const ByteVector`.
+    ConstReverseIterator rbegin() const { 
+      return ConstReverseIterator(bytes_, bytes_.size()-1); 
+    }
     // Returns the `Iterator` that points to the last `Byte` 
     // from the `ByteVector`.
     Iterator end() { return Iterator(bytes_, bytes_.size()); }
+    // Returns the `ConstIterator` that points to the last `Byte`
+    // from the `const ByteVector`.
+    ConstIterator end() const { return ConstIterator(bytes_, bytes_.size()); }
     // Returns the `ReverseIterator` that points to the first 
     // `Byte` from the `ByteVector`.
     ReverseIterator rend() { return ReverseIterator(bytes_, -1); }
+    // Returns the `ConstReverseIterator` that points to the first
+    // `Byte` from the `const ByteVector`.
+    ConstReverseIterator rend() const { 
+      return ConstReverseIterator(bytes_, -1);
+    }
     // Returns the `Byte` from the position `pos`.
     Byte operator[](const std::size_t pos) const;
     // Accesses the `Byte` from the position `pos`.

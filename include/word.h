@@ -21,7 +21,7 @@ namespace ByteUtils {
 //    std::cout << result;
 class Word {
   public:
-    // The class `Iterator` class provides a mechanism 
+    // The class `Iterator` provides a mechanism 
     // to traverse a `Word` instance.
     class Iterator {
       public:
@@ -42,7 +42,28 @@ class Word {
         std::vector<Byte>* word_;
         std::size_t index_;
     };
-    // The class `ReverseIterator` class provides a mechanism 
+    // The class `ConstIterator` provides a mechanism
+    // to travers a `const Word` instance.
+    class ConstIterator {
+      public:
+        ConstIterator(const std::vector<Byte>& word, std::size_t index)
+            : word_(&word), index_(index) {}
+        // Move the index towards LSB. 
+        inline ConstIterator& operator++() { ++index_; return *this; }
+        // Move the index towards MSB.
+        inline ConstIterator& operator--() { --index_; return *this; }
+        // Returns a reference to a byte from the `Word` object.
+        inline const Byte& operator*() const { return (*word_)[index_]; }
+        // Returns a pointer to a byte from the `Word` object.
+        inline const Byte* operator->() const { return &(*word_)[index_]; }
+        inline bool operator!=(const ConstIterator& other) const { 
+          return word_ != other.word_ || index_ != other.index_; 
+        }
+      private:
+        const std::vector<Byte>* word_;
+        std::size_t index_;
+    };
+    // The class `ReverseIterator` provides a mechanism 
     // to traverse a `Word` instance in reverse order.
     class ReverseIterator {
       public:
@@ -63,6 +84,27 @@ class Word {
         std::vector<Byte>* word_;
         std::size_t index_;
     };
+    // The class `ConstReverseIterator` provides a mechanism
+    // to travers a `const Word` instance in reverse order.
+    class ConstReverseIterator {
+      public:
+         ConstReverseIterator(const std::vector<Byte>& word, std::size_t index)
+            : word_(&word), index_(index) {}
+        // Move the index towards MSB. 
+        inline ConstReverseIterator& operator++() { --index_; return *this; }
+        // Move the index towards LSB.
+        inline ConstReverseIterator& operator--() { ++index_; return *this; }
+        // Returns a reference to a byte from the `Word` object.
+        inline const Byte& operator*() const { return (*word_)[index_]; }
+        // Returns a pointer to a byte from the `Word` object.
+        inline const Byte* operator->() const { return &(*word_)[index_]; }
+        inline bool operator!=(const ConstReverseIterator& other) const { 
+          return word_ != other.word_ || index_ != other.index_; 
+        }
+      private:
+        const std::vector<Byte>* word_;
+        std::size_t index_;
+    };
     Word() = default;
     // Creates a dynamic sized `Word` object with given hexadecimal values.
     Word(const std::string& hex_string, const std::size_t bits = 32);
@@ -79,14 +121,30 @@ class Word {
     friend std::ostream& operator<<(std::ostream& stream, const Word& data);
     // Returns the `Iterator` that points to the first `Byte` from the `Word`.
     Iterator begin() { return Iterator(word_, 0); }
+    // Returns the `ConstIterator` that points to the first `Byte` 
+    // from the `const Word`.
+    ConstIterator begin() const { return ConstIterator(word_, 0); }
     // Returns the `ReverseIterator` that points to the last 
     // `Byte` from the `Word`.
     ReverseIterator rbegin() { return ReverseIterator(word_, word_.size()-1); }
+    // Returns the `ConstReverseIterator` that points to the last 
+    // `Byte` from the `const Word`.
+    ConstReverseIterator rbegin() const { 
+      return ConstReverseIterator(word_, word_.size()-1); 
+    }
     // Returns the `Iterator` that points to the last `Byte` from the `Word`.
     Iterator end() { return Iterator(word_, word_.size()); }
+    // Returns the `ConstIterator` that points to the last `Byte`
+    //  from the `const Word`.
+    ConstIterator end() const { return ConstIterator(word_, word_.size()); }
     // Returns the `ReverseIterator` that points to the first 
-    // `Byte` from the `Word`.
+    // `Byte` from the `cons Word`.
     ReverseIterator rend() { return ReverseIterator(word_, -1); }
+    // Returns the `ConstReverseIterator` that points to the first 
+    // `Byte` from the `const Word`.
+    ConstReverseIterator rend() const { 
+      return ConstReverseIterator(word_, -1); 
+    }
     // Performs the XOR operation between two `Word` objects.
     Word operator^(const Word& word) const;
     // Performs the XOR operation between `Word` and `Byte` objects.
