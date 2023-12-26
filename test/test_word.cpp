@@ -183,3 +183,11 @@ TEST(TestWord, TestConstReverseIterator) {
   std::string expected_output = "ffff0000";
   EXPECT_STREQ(output.c_str(), expected_output.c_str());
 }
+
+TEST(TestWord, TestPushBack) {
+  ByteUtils::Word word;
+  word.PushBack(ByteUtils::Byte("ff", 16));
+  std::string output = word.ToHex();
+  std::string expected_output = "ff";
+  EXPECT_STREQ(output.c_str(), expected_output.c_str()); 
+}
