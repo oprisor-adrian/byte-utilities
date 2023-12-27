@@ -47,5 +47,10 @@ install(
   FILES_MATCHING PATTERN "*.cmake"
 )
 
-enable_testing()
-add_subdirectory(test/)
+find_package(GTest REQUIRED)
+if(GTest_FOUND)
+  enable_testing()
+  add_subdirectory(test/)
+else()
+  message(STATUS "GTest not found. Tests will be disabled.")
+endif()
