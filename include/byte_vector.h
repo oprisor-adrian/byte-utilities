@@ -166,6 +166,8 @@ class ByteVector{
     Byte& operator[](const std::size_t pos);
     // Pushes back the bytes from the `Word` object.
     void PushBack(const Word& word);
+    // Pushes back a `Byte` object.
+    void PushBack(const Byte& byte);
     // Returns the `Word` object from the position `pos`.
     Word GetWord(const std::size_t pos) const;
     // Returns a vector of size `count` by 'Word' objects.

@@ -74,6 +74,10 @@ void ByteVector::PushBack(const Word& word) {
   }
 }
 
+void ByteVector::PushBack(const Byte& byte) {
+  bytes_.push_back(byte);
+}
+
 Word ByteVector::GetWord(const std::size_t pos) const {
   if (pos >= bytes_.size()/4) {
     throw std::out_of_range("The position `pos` is out of range.");
