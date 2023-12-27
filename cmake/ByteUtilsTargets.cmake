@@ -16,14 +16,13 @@
    
   Contact: contact@dev-adrian.com
 ]]
-include(GoogleTest)
-add_executable(${CMAKE_PROJECT_NAME}_test
-  test_byte.cpp
-  test_word.cpp
-  test_byte_vector.cpp
+add_library(ByteUtils INTERFACE IMPORTED)
+set_target_properties(ByteUtils PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES ${ByteUtils_INCLUDE_DIRS}
 )
-target_link_libraries(${CMAKE_PROJECT_NAME}_test
-  GTest::gtest_main
-  _${CMAKE_PROJECT_NAME}  
+set_target_properties(ByteUtils PROPERTIES
+  INTERFACE_LINK_LIBRARIES ${ByteUtils_LIBRARIES}
 )
-gtest_discover_tests(${CMAKE_PROJECT_NAME}_test)
+set_property(TARGET ByteUtils PROPERTY
+  INTERFACE_BYTEUTILS_VERSION ${ByteUtils_VERSION}
+)

@@ -16,14 +16,7 @@
    
   Contact: contact@dev-adrian.com
 ]]
-include(GoogleTest)
-add_executable(${CMAKE_PROJECT_NAME}_test
-  test_byte.cpp
-  test_word.cpp
-  test_byte_vector.cpp
-)
-target_link_libraries(${CMAKE_PROJECT_NAME}_test
-  GTest::gtest_main
-  _${CMAKE_PROJECT_NAME}  
-)
-gtest_discover_tests(${CMAKE_PROJECT_NAME}_test)
+set(ByteUtils_VERSION "1.1")
+set(ByteUtils_INCLUDE_DIRS ${CMAKE_CURRENT_LIST_DIR}/../include)
+set(ByteUtils_LIBRARIES ${CMAKE_CURRENT_LIST_DIR}/../lib/lib_byte_utils.so)
+include(${CMAKE_CURRENT_LIST_DIR}/ByteUtilsTargets.cmake)
