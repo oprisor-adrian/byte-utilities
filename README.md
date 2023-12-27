@@ -1,5 +1,7 @@
 
 [![CTest](https://github.com/oprisor-adrian/byte-utilities/actions/workflows/ubuntu-unit-test.yml/badge.svg?branch=main)](https://github.com/oprisor-adrian/byte-utilities/actions/workflows/ubuntu-unit-test.yml)
+![Linux Compatible](https://img.shields.io/badge/Linux-Compatible-brightgreen.svg)
+![Windows Not Tested](https://img.shields.io/badge/Windows-Not%20Tested-lightgrey.svg)
 
 ## Byte utilities library
 The `byte_utils` library is created for easy-to-use byte-level operations and manipulations. It's designed especially for use in cryptographic algorithms, and based on `std::bitset`.
@@ -11,54 +13,67 @@ This approach isn't meant for production use. Be aware of bugs and security risk
 > see [license](./LICENSE)
 
 ## Installation steps
-### Install from source
-This installation process will create a `lib` directory in the current folder where the binary file and headers will be included.
-1. Clone the repository
+### Install using the `.sh` script
+1. Downloads the last version of the library
 ```bash
-git clone git@github.com:oprisor-adrian/byte-utilities.git
+wget https://github.com/oprisor-adrian/byte-utilities.git
 ```
-2. Build the library
+2. Installs the library using the `.sh` script
 ```bash
-mkdir build && cd build/
-cmake ..
-make
+cd byte-utilities/
+chmod +x install.sh
+./install.sh
 ```
-3. Install the library
-```bash
-make install
-```
+Make sure you run the script with `root` privileges.
 
 ### Install using precompiled binary
-1. Download the library
+1. Downloads the library
 ```bash
-wget https://github.com/oprisor-adrian/byte-utilities/releases/download/v1.0-alpha/byte_utils.rar
+wget https://github.com/oprisor-adrian/byte-utilities/releases/download/<version>/byte_utils.tar.gz
 ```
-2. Extract the files
+Replace `<version>` with the desired release version.
+> see [releases](https://github.com/oprisor-adrian/byte-utilities/releases)
+2. Extracts the files
 ```bash
-unrar x byte_utils.rar /usr/local/byte_utils/
+tar -xzf byte_utils.tar.gz -C <path-to-dir>
 ```
-Change the `/usr/local/byte_utils/` path to the desired path.
+Replace the `<path-to-dir>` with the desired path where the library can be found.
+
+3. Adds the path to the `CMAKE_PREFIX_PATH` environment variable
+```bash
+export CMAKE_PREFIX_PATH="<path-to_dir>/cmake:$CMAKE_PREFIX_PATH"
+```
+Adding the path to the `CMAKE_PREFIX_PATH` ensures that the library can be imported using the `find_package`. To make the variable to be persistent, add the above line to your shell profile:
+```bash
+echo 'export CMAKE_PREFIX_PATH="<path-to-dir>/cmake:$CMAKE_PREFIX_PATH"' >> ~/.profile
+```
+The `~/.profile` file can be named differently depending on your system or shell.
+
 
 ## Usage
-Add to your `CMakeLists.txt` file the following:
+Adds to your `CMakeLists.txt` file the following:
 
-1. Add the path where the linker will look for the library
+1. Finds the library using `find_package`
 ```cmake
-link_directories(path/to/the/library/bytes_utils/)
+find_package(ByteUtils REQUIRED)
 ```
 
-2. Add the path to the library header files
+3. Links the library to your target
 ```cmake
-include_directories(path/to/the/library/bytes_utils/include)
+target_link_libraries(`taget_name` ByteUtils)
 ```
-or specify include directory for a specific target
-```cmake
-target_include_directories(
-  `target_name' PRIVATE
-  path/to/the/library/bytes_utils/include
-)
+
+## Testing
+The repository contain the unit tests. To run the test make sure you have installed the `GTest` library.
+In the cloned repository runs the following:
+1. Builds the project
+```bash
+cmake -S . -B build/
 ```
-3. Link  the library to your target
-```cmake
-target_link_libraries(`taget_name` _byte_utils)
+2. Runs the unit tests
+```bash
+ctest --test-dir build/
 ```
+
+## Notices
+This project utilizes the Google Test (GTest) framework for testing purposes. Please refer to the [GTest documentation](https://google.github.io/googletest/) for more information on its usage and licensing terms.
