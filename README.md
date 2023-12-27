@@ -16,11 +16,15 @@ This approach isn't meant for production use. Be aware of bugs and security risk
 ### Install using the `.sh` script
 1. Downloads the last version of the library
 ```bash
-wget https://github.com/oprisor-adrian/byte-utilities.git
+wget https://github.com/oprisor-adrian/byte-utilities/archive/v1.1-alpha.tar.gz
+```
+2. Extracts the source code
+```bash
+tar -xzf v1.1-alpha.tar.gz
 ```
 2. Installs the library using the `.sh` script
 ```bash
-cd byte-utilities/
+cd byte-utilities-1.1-alpha/
 chmod +x install.sh
 ./install.sh
 ```
@@ -29,9 +33,9 @@ Make sure you run the script with `root` privileges.
 ### Install using precompiled binary
 1. Downloads the library
 ```bash
-wget https://github.com/oprisor-adrian/byte-utilities/releases/download/<version>/byte_utils.tar.gz
+wget https://github.com/oprisor-adrian/byte-utilities/releases/download/<release>/byte_utils.tar.gz
 ```
-Replace `<version>` with the desired release version.
+Replace `<release>` with the desired release version.
 > see [releases](https://github.com/oprisor-adrian/byte-utilities/releases)
 2. Extracts the files
 ```bash
