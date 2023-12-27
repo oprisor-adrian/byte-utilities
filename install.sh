@@ -28,8 +28,14 @@ checkLibrary() {
   fi
 }
 
+# Checks if BASH is used as shell.
+if [ ! -n "$BASH_VERSION" ]; then
+    echo "Bash shell is not in use."
+    exit
+fi
+
 # Checks for dependencies
-printf "\nChecking for necessary library\n\n"
+printf "\nChecking for the necessary libraries\n\n"
 printf "library name |    status    |               version\n"
 printf "========================================================================\n"
 
@@ -42,7 +48,7 @@ if [ ${#not_installed[@]} -gt 0 ]; then
   answer=${answer:y}
   if [[ $answer =~ [yY] ]]; then
     for lib in "${not_installed[@]}"; do
-      sudo apt install "$lib"
+      apt-get install "$lib"
     done
   else 
     exit
@@ -63,5 +69,5 @@ printf "\n"
 # Build and install the library
 make -j$(nproc) install 
 
-# Add environment variable
+# Adds the path to the environment variable
 echo 'export CMAKE_PREFIX_PATH="/usr/local/byte_utils/cmake:$CMAKE_PREFIX_PATH"' >> ~/.profile
