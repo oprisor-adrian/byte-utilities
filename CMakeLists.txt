@@ -47,7 +47,7 @@ install(
   FILES_MATCHING PATTERN "*.cmake"
 )
 
-find_package(GTest REQUIRED)
+find_package(GTest QUIET)
 if(GTest_FOUND)
   enable_testing()
   add_subdirectory(test/)
