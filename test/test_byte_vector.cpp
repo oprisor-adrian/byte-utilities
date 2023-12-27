@@ -133,3 +133,11 @@ TEST(TestByteVector, TestConstReverseIterator) {
   std::string expected_output = "1b0a";
   ASSERT_STREQ(output.c_str(), expected_output.c_str());
 }
+
+TEST(TestByteVector, TestPushBack) {
+  ByteUtils::ByteVector bytes("0a");
+  bytes.PushBack(ByteUtils::Byte("1b", 16));
+  std::string output = bytes.ToHex();
+  std::string expected_output = "0a1b";
+  EXPECT_STREQ(output.c_str(), expected_output.c_str());
+}
