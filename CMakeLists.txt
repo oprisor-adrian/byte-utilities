@@ -22,7 +22,7 @@ project(byte_utils)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
-set(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR})
+set(CMAKE_INSTALL_PREFIX /usr/local/${CMAKE_PROJECT_NAME})
 
 add_library(_${CMAKE_PROJECT_NAME} SHARED
   src/byte.cpp
@@ -38,8 +38,13 @@ install(
 )
 install(
   DIRECTORY ${CMAKE_SOURCE_DIR}/include/
-  DESTINATION lib/include
+  DESTINATION include
   FILES_MATCHING PATTERN "*.h"
+)
+install(
+  DIRECTORY ${CMAKE_SOURCE_DIR}/cmake/
+  DESTINATION cmake
+  FILES_MATCHING PATTERN "*.cmake"
 )
 
 enable_testing()
