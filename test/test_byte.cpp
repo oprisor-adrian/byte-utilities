@@ -320,6 +320,16 @@ TEST_F(ByteTest, TestAccesBitOperator) {
   EXPECT_EQ(byte2.GetByte(), std::bitset<8>{"11011010"});
 }
 
+TEST_F(ByteTest, TestComparisonOperators) {
+    ByteUtils::Byte byte("10101010", ByteUtils::Base::base_2);
+  // Tests equal operator.
+  EXPECT_FALSE((byte1 == byte2));
+  EXPECT_TRUE((byte1 == byte));
+  // Tests not equal operator.
+  EXPECT_FALSE((byte1 != byte));
+  EXPECT_TRUE((byte1 != byte2));
+}
+
 TEST_F(ByteTest, TestIsAnySet) {
   EXPECT_TRUE(byte1.IsAnySet());
   ByteUtils::Byte byte(0x00);
