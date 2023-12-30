@@ -145,6 +145,14 @@ std::bitset<8>::reference Byte::operator[](std::size_t pos) {
   return byte_[pos];
 }
 
+bool Byte::operator==(const Byte& byte) const {
+  return byte_ == byte.byte_;
+}
+
+bool Byte::operator!=(const Byte& byte) const {
+  return byte_ != byte.byte_;
+}
+
 std::string Byte::ToHex() const {
   std::stringstream stream;
   stream << std::hex << std::setw(2) << std::setfill('0') << byte_.to_ulong();

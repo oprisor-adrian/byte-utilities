@@ -146,6 +146,10 @@ class Byte {
     bool operator[](std::size_t pos) const;
     // Accesses the bit from the position `pos`.
     std::bitset<8>::reference operator[](std::size_t pos);
+    // Checks if two `Byte` objects are equal.
+    bool operator==(const Byte& byte) const;
+    // Checks if two `Byte` objects are not equal.
+    bool operator!=(const Byte& byte) const;
     // Checks if at least one bit is set to `1`.
     inline bool IsAnySet() const { return byte_.any(); }
     inline int ToInt() const { return byte_.to_ulong(); }
