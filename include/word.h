@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <cmath>
+#include <iostream>
 #include <ostream>
 #include <string>
 #include <array>
