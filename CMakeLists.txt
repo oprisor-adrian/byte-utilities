@@ -26,7 +26,6 @@ set(CMAKE_INSTALL_PREFIX /usr/local/${CMAKE_PROJECT_NAME})
 
 add_library(_${CMAKE_PROJECT_NAME} SHARED
   src/byte.cpp
-  src/word.cpp
   src/byte_vector.cpp
 )
 
