@@ -58,7 +58,7 @@ TEST(TestByteVector, TestAccessByteOperator) {
 
 TEST(TestByteVector, TestPushBackWord) {
   ByteUtils::ByteVector bytes("ff");
-  ByteUtils::Word word("1a1b1c1d");
+  ByteUtils::Word<32> word("1a1b1c1d");
   bytes.PushBack(word);
   std::string output = bytes.ToHex();
   std::string expected_output = "ff1a1b1c1d";
@@ -67,7 +67,7 @@ TEST(TestByteVector, TestPushBackWord) {
 
 TEST(TestByteVector, TestGetWord) {
   ByteUtils::ByteVector bytes("0a0b0c0d1a1b1c1d");
-  ByteUtils::Word word = bytes.GetWord(1);
+  auto word = bytes.GetWord<32>(1);
   std::string output = word.ToHex();
   std::string expected_output = "1a1b1c1d";
   EXPECT_STREQ(output.c_str(), expected_output.c_str());
@@ -75,7 +75,7 @@ TEST(TestByteVector, TestGetWord) {
 
 TEST(TestByteWord, TestGetWordVector) {
   ByteUtils::ByteVector bytes("000102030405060708090a0b0c0d0e0f");
-  std::vector<ByteUtils::Word> words = bytes.GetWord(1, 2);
+  auto words = bytes.GetWord<32>(1, 2);
   std::string output = "";
   for (const auto& w : words) {
     output += w.ToHex();
@@ -136,7 +136,7 @@ TEST(TestByteVector, TestConstReverseIterator) {
 
 TEST(TestByteVector, TestPushBack) {
   ByteUtils::ByteVector bytes("0a");
-  bytes.PushBack(ByteUtils::Byte("1b", 16));
+  bytes.PushBack(ByteUtils::Byte("1b", ByteUtils::Base::base_16));
   std::string output = bytes.ToHex();
   std::string expected_output = "0a1b";
   EXPECT_STREQ(output.c_str(), expected_output.c_str());
