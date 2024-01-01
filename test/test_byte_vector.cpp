@@ -141,3 +141,11 @@ TEST(TestByteVector, TestPushBack) {
   std::string expected_output = "0a1b";
   EXPECT_STREQ(output.c_str(), expected_output.c_str());
 }
+
+TEST(TestByteVector, TestSubvector) {
+  ByteUtils::ByteVector bytes("0a0b0c0d1a1b1c1d");
+  std::string output = bytes.Subvector(1, 4).ToHex();
+  std::string expected_output = "0b0c0d1a";
+  EXPECT_STREQ(output.c_str(), expected_output.c_str());
+  EXPECT_THROW(bytes.Subvector(5, 7), std::out_of_range);
+}

@@ -21,7 +21,6 @@
 #include <algorithm>
 #include <sstream>
 #include <stdexcept>
-#include <vector>
 #include <regex>
 
 namespace ByteUtils {
@@ -68,6 +67,16 @@ Byte& ByteVector::operator[](const std::size_t pos) {
 
 void ByteVector::PushBack(const Byte& byte) {
   bytes_.push_back(byte);
+}
+
+ByteVector ByteVector::Subvector(std::size_t pos, 
+                                        std::size_t count) const {
+  if (pos + count > bytes_.size()) {
+    throw std::out_of_range("Exceeded the vector size.");
+  }
+  auto start_pos = bytes_.begin() + pos;
+  auto end_pos = bytes_.begin() + pos + count;
+  return std::vector<Byte>(start_pos, end_pos);
 }
 
 std::string ByteVector::ToHex() const {

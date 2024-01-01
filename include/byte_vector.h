@@ -24,7 +24,6 @@
 #include <vector>
 
 #include "byte.h"
-#include "details.h"
 #include "word.h"
 
 namespace ByteUtils {
@@ -175,6 +174,8 @@ class ByteVector{
     // Returns a vector of size `count` of 'Word' objects.
     template<std::size_t bits>
     std::vector<Word<bits>> GetWord(std::size_t pos, std::size_t count) const;
+    // Returns a `n_bytes` size subvector starting from the position `pos`.
+    ByteVector Subvector(std::size_t pos, std::size_t count) const;
     std::string ToHex() const;
     // Returns the number of bytes from the `ByteVector` object.
     inline std::size_t Size() const { return bytes_.size(); }
