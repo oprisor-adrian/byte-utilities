@@ -1,5 +1,5 @@
 /* 
-  Copyright (C) 2023 Oprișor Adrian-Ilie
+  Copyright (C) 2023-2024 Oprișor Adrian-Ilie
   
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -24,10 +24,9 @@
 #include <vector>
 
 #include "byte.h"
+#include "word.h"
 
 namespace ByteUtils {
-
-class Word;
 
 // The `ByteVector` class manage a vector of `N` `Byte` objects. 
 // Example:
@@ -161,22 +160,61 @@ class ByteVector{
       return ConstReverseIterator(bytes_, -1);
     }
     // Returns the `Byte` from the position `pos`.
-    Byte operator[](const std::size_t pos) const;
+    Byte operator[](std::size_t pos) const;
     // Accesses the `Byte` from the position `pos`.
-    Byte& operator[](const std::size_t pos);
+    Byte& operator[](std::size_t pos);
     // Pushes back the bytes from the `Word` object.
-    void PushBack(const Word& word);
-    // Returns the `Word` object from the position `pos`.
-    Word GetWord(const std::size_t pos) const;
-    // Returns a vector of size `count` by 'Word' objects.
-    std::vector<Word> GetWord(const std::size_t pos, 
-                              const std::size_t count) const;
+    template<std::size_t bits>
+    void PushBack(const Word<bits>& word);
+    // Pushes back a `Byte` object.
+    void PushBack(const Byte& byte);
+    // Returns a `N` bits size `Word` object from the position `pos`.
+    template<std::size_t bits>
+    Word<bits> GetWord(std::size_t pos) const;
+    // Returns a vector of size `count` of 'Word' objects.
+    template<std::size_t bits>
+    std::vector<Word<bits>> GetWord(std::size_t pos, std::size_t count) const;
+    // Returns a `n_bytes` size subvector starting from the position `pos`.
+    ByteVector Subvector(std::size_t pos, std::size_t count) const;
     std::string ToHex() const;
     // Returns the number of bytes from the `ByteVector` object.
     inline std::size_t Size() const { return bytes_.size(); }
   private:
     std::vector<Byte> bytes_;
 };
+
+template<std::size_t bits>
+void ByteVector::PushBack(const Word<bits>& word) {
+  for (const auto& byte : word) {
+    bytes_.push_back(byte);
+  }
+}
+
+template<std::size_t bits>
+Word<bits> ByteVector::GetWord(std::size_t pos) const {
+  if (pos >= bytes_.size()/4) {
+    throw std::out_of_range("The position `pos` is out of range.");
+  }
+  Word<bits> word;
+  std::size_t bytes_2_get = detail::RoundUp(bits);
+  auto begin = bytes_.begin()+pos*4;
+  auto end = bytes_.begin()+pos*4+4;
+  std::size_t index = 0;
+  for (auto byte = begin; byte != end; ++byte) {
+    word[index++] = *byte;
+  }
+  return word;
+}
+
+template<std::size_t bits>
+std::vector<Word<bits>> ByteVector::GetWord(std::size_t pos, 
+                                           std::size_t count) const {
+  std::vector<Word<bits>> words;
+  for (std::size_t index = 0; index < count; index++) {
+    words.emplace_back(GetWord<bits>(pos+index));
+  }
+  return words;
+}
 
 }  // namespace ByteUtils
 

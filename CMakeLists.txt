@@ -1,5 +1,5 @@
 #[[ 
-  Copyright (C) 2023 Oprișor Adrian-Ilie
+  Copyright (C) 2023-2024 Oprișor Adrian-Ilie
   
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@ set(CMAKE_INSTALL_PREFIX /usr/local/${CMAKE_PROJECT_NAME})
 
 add_library(_${CMAKE_PROJECT_NAME} SHARED
   src/byte.cpp
-  src/word.cpp
   src/byte_vector.cpp
 )
 

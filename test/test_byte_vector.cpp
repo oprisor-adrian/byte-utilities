@@ -1,5 +1,5 @@
 /* 
-  Copyright (C) 2023  Oprișor Adrian-Ilie
+  Copyright (C) 2023-2024  Oprișor Adrian-Ilie
   
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ TEST(TestByteVector, TestAccessByteOperator) {
 
 TEST(TestByteVector, TestPushBackWord) {
   ByteUtils::ByteVector bytes("ff");
-  ByteUtils::Word word("1a1b1c1d");
+  ByteUtils::Word<32> word("1a1b1c1d");
   bytes.PushBack(word);
   std::string output = bytes.ToHex();
   std::string expected_output = "ff1a1b1c1d";
@@ -67,7 +67,7 @@ TEST(TestByteVector, TestPushBackWord) {
 
 TEST(TestByteVector, TestGetWord) {
   ByteUtils::ByteVector bytes("0a0b0c0d1a1b1c1d");
-  ByteUtils::Word word = bytes.GetWord(1);
+  auto word = bytes.GetWord<32>(1);
   std::string output = word.ToHex();
   std::string expected_output = "1a1b1c1d";
   EXPECT_STREQ(output.c_str(), expected_output.c_str());
@@ -75,7 +75,7 @@ TEST(TestByteVector, TestGetWord) {
 
 TEST(TestByteWord, TestGetWordVector) {
   ByteUtils::ByteVector bytes("000102030405060708090a0b0c0d0e0f");
-  std::vector<ByteUtils::Word> words = bytes.GetWord(1, 2);
+  auto words = bytes.GetWord<32>(1, 2);
   std::string output = "";
   for (const auto& w : words) {
     output += w.ToHex();
@@ -132,4 +132,20 @@ TEST(TestByteVector, TestConstReverseIterator) {
   std::string output = ::testing::internal::GetCapturedStdout();
   std::string expected_output = "1b0a";
   ASSERT_STREQ(output.c_str(), expected_output.c_str());
+}
+
+TEST(TestByteVector, TestPushBack) {
+  ByteUtils::ByteVector bytes("0a");
+  bytes.PushBack(ByteUtils::Byte("1b", ByteUtils::Base::base_16));
+  std::string output = bytes.ToHex();
+  std::string expected_output = "0a1b";
+  EXPECT_STREQ(output.c_str(), expected_output.c_str());
+}
+
+TEST(TestByteVector, TestSubvector) {
+  ByteUtils::ByteVector bytes("0a0b0c0d1a1b1c1d");
+  std::string output = bytes.Subvector(1, 4).ToHex();
+  std::string expected_output = "0b0c0d1a";
+  EXPECT_STREQ(output.c_str(), expected_output.c_str());
+  EXPECT_THROW(bytes.Subvector(5, 7), std::out_of_range);
 }

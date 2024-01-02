@@ -1,5 +1,5 @@
 /* 
-  Copyright (C) 2023 Oprișor Adrian-Ilie
+  Copyright (C) 2023-2024 Oprișor Adrian-Ilie
   
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -21,10 +21,7 @@
 #include <algorithm>
 #include <sstream>
 #include <stdexcept>
-#include <vector>
 #include <regex>
-
-#include "word.h"
 
 namespace ByteUtils {
 
@@ -41,7 +38,7 @@ ByteVector::ByteVector(const std::string& hex_string) {
                                           hex_values.end(), 
                                           hex_regex);
   for (auto it=regex_begin; it!=std::sregex_iterator(); ++it) {
-    bytes_.emplace_back(it->str(), 16);
+    bytes_.emplace_back(it->str(), Base::base_16);
   }
 }
 
@@ -68,27 +65,18 @@ Byte& ByteVector::operator[](const std::size_t pos) {
   return bytes_[pos];
 }
 
-void ByteVector::PushBack(const Word& word) {
-  for (const auto& byte : word) {
-    bytes_.emplace_back(byte);
-  }
+void ByteVector::PushBack(const Byte& byte) {
+  bytes_.push_back(byte);
 }
 
-Word ByteVector::GetWord(const std::size_t pos) const {
-  if (pos >= bytes_.size()/4) {
-    throw std::out_of_range("The position `pos` is out of range.");
+ByteVector ByteVector::Subvector(std::size_t pos, 
+                                 std::size_t count) const {
+  if (pos + count > bytes_.size()) {
+    throw std::out_of_range("Exceeded the vector size.");
   }
-  std::vector<Byte> word(bytes_.begin()+pos*4, bytes_.begin()+pos*4+4);
-  return word;
-}
-
-std::vector<Word> ByteVector::GetWord(const std::size_t pos,
-                                      const std::size_t count) const {
-  std::vector<Word> words;
-  for (std::size_t index = 0; index < count; index++) {
-    words.emplace_back(GetWord(pos+index));
-  }
-  return words;
+  auto start_pos = bytes_.begin() + pos;
+  auto end_pos = bytes_.begin() + pos + count;
+  return std::vector<Byte>(start_pos, end_pos);
 }
 
 std::string ByteVector::ToHex() const {

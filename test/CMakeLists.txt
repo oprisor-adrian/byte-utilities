@@ -1,5 +1,5 @@
 #[[ 
-  Copyright (C) 2023 Oprișor Adrian-Ilie
+  Copyright (C) 2023-2024 Oprișor Adrian-Ilie
   
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -18,6 +18,8 @@
 ]]
 include(GoogleTest)
 add_executable(${CMAKE_PROJECT_NAME}_test
+  test_byte_iterator.cpp
+  test_byte_reverse_iterator.cpp
   test_byte.cpp
   test_word.cpp
   test_byte_vector.cpp
