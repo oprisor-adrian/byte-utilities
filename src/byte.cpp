@@ -25,6 +25,69 @@
 
 namespace ByteUtils {
 
+Byte::Iterator::Iterator(std::bitset<8>& bits, std::size_t index)
+    : bits_(&bits), index_(index) {}
+
+std::bitset<8>::reference Byte::Iterator::operator*() const {
+  if (index_ > 8) {
+    throw std::out_of_range("Index out of range.");
+  }
+  return (*bits_)[index_];
+}
+
+std::bitset<8>::reference Byte::Iterator::operator*() {
+  if (index_ > 8) {
+    throw std::out_of_range("Index out of range.");
+  }
+  return (*bits_)[index_];
+}
+
+Byte::Iterator& Byte::Iterator::operator++() {
+  --index_;
+  return *this;
+}
+
+Byte::Iterator& Byte::Iterator::operator--() {
+  ++index_;
+  return *this;
+}
+
+bool Byte::Iterator::operator!=(const Byte::Iterator& other) const {
+  return bits_ != other.bits_ || index_ != other.index_;
+}
+
+Byte::ReverseIterator::ReverseIterator(std::bitset<8>& bits, std::size_t index)
+    : bits_(&bits), index_(index) {}
+
+std::bitset<8>::reference Byte::ReverseIterator::operator*() const {
+  if (index_ > 8) {
+    throw std::out_of_range("Index out of range.");
+  }
+  return (*bits_)[index_];
+}
+
+std::bitset<8>::reference Byte::ReverseIterator::operator*() {
+  if (index_ > 8) {
+    throw std::out_of_range("Index out of range.");
+  }
+  return (*bits_)[index_];
+}
+
+Byte::ReverseIterator& Byte::ReverseIterator::operator++() {
+  ++index_;
+  return *this;
+}
+
+Byte::ReverseIterator& Byte::ReverseIterator::operator--() {
+  --index_;
+  return *this;
+}
+
+bool Byte::ReverseIterator::operator!=(
+    const Byte::ReverseIterator& other) const {
+  return bits_ != other.bits_ || index_ != other.index_;
+}
+
 Byte::Byte(const std::bitset<8>& byte): byte_(byte) {}
 
 Byte::Byte(const std::uint8_t data): byte_(data) {}

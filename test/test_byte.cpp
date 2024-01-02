@@ -195,7 +195,7 @@ TEST_F(ByteTest, TestIterator) {
       std::cout << bit;
     }
     std::string output = ::testing::internal::GetCapturedStdout();
-    std::string expected_output = "01010101";
+    std::string expected_output = "10101010";
     EXPECT_STREQ(output.c_str(), expected_output.c_str()); 
   }
   // Tests iterator-based loop.
@@ -217,7 +217,7 @@ TEST_F(ByteTest, TestReverseIterator) {
     std::cout << *it;
   }
   std::string output = ::testing::internal::GetCapturedStdout();
-  std::string expected_output = "10101010";
+  std::string expected_output = "01010101";
   EXPECT_STREQ(output.c_str(), expected_output.c_str());
 }
 

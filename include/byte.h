@@ -35,8 +35,7 @@ enum class Base {
 
 // The `Byte` class manage and performs bitwise operations on 
 // an array of 8 bits. The class do not handle representation
-// of negative values. The bit positioned at the far left 
-// signifies the MSB, while the bit at the far right signifies LSB.
+// of negative values. The bits are ordered in little-endian format.
 // Example:
 //     ByteUtils::Byte byte1(0x57);
 //     ByteUtils::Byte byte2("11101101", ByteUtils::Base:base_2);
@@ -44,51 +43,37 @@ enum class Base {
 class Byte {
   public:
     // The class `Iterator` provides a mechanism 
-    // to traverse a `Byte` instance.
+    // to traverse a `Byte` instance from LSB to MSB.
     class Iterator {
       public:
-        Iterator(std::bitset<8>& bits, std::size_t index)
-            : bits_(&bits), index_(index) {};
+        Iterator(std::bitset<8>& bits, std::size_t index);
         // Returns a constant reference to the bit from position `index_`. 
-        inline std::bitset<8>::reference operator*() const { 
-          return (*bits_)[index_]; 
-        }
+        std::bitset<8>::reference operator*() const;
         // Returns a reference to the bit from position `index_`.
-        inline std::bitset<8>::reference operator*() { 
-          return (*bits_)[index_]; 
-        }
-        // Moves the index towards the LSB.
-        Iterator& operator++() { ++index_; return *this; }
+        std::bitset<8>::reference operator*();
         // Moves the index towards the MSB.
-        Iterator& operator--() { --index_; return *this; }
-        bool operator!=(const Iterator& other) const { 
-          return bits_ != other.bits_ || index_ != other.index_; 
-        }
+        Iterator& operator++();
+        // Moves the index towards the LSB.
+        Iterator& operator--();
+        bool operator!=(const Iterator& other) const;
       private:
         std::bitset<8>* bits_;
         std::size_t index_;
     };
     // The class `ReverseIterator` provides a mechanism 
-    // to traverse a `Byte` instance in reverse order.
+    // to traverse a `Byte` instance from MSB to LSB.
     class ReverseIterator {
       public:
-        ReverseIterator(std::bitset<8>& bits, std::size_t index)
-            : bits_(&bits), index_(index) {}
+        ReverseIterator(std::bitset<8>& bits, std::size_t index);
         // Returns a constant reference to the bit from position `index_`.
-        inline std::bitset<8>::reference operator*() const {
-          return (*bits_)[index_];
-        }
+        std::bitset<8>::reference operator*() const;
         // Returns a reference to the bit from position `index_`.
-        inline std::bitset<8>::reference operator*() {
-          return (*bits_)[index_];
-        }
+        std::bitset<8>::reference operator*();
         // Moves the index towards the MSB.
-        ReverseIterator& operator++() { --index_; return *this; }
+        ReverseIterator& operator++();
         // Moves the index towards the LSB.
-        ReverseIterator& operator--() { ++index_; return *this; }
-        bool operator!=(const ReverseIterator& other) const { 
-          return bits_ != other.bits_ || index_ != other.index_; 
-        }
+        ReverseIterator& operator--();
+        bool operator!=(const ReverseIterator& other) const;
       private:
         std::bitset<8>* bits_;
         std::size_t index_;
@@ -110,14 +95,14 @@ class Byte {
     // Prints the reference to a bit.
     friend std::ostream& operator<<(std::ostream& stream,
                                     const std::bitset<8>::reference bit);
-    // Returns a reference to the MSB.
-    Iterator begin() { return Iterator(byte_, 0); }
     // Returns a reference to the LSB.
-    ReverseIterator rbegin() { return ReverseIterator(byte_, 7); }
-    // Returns a reference to the LSB.
-    Iterator end() { return Iterator(byte_, 8); }
+    Iterator begin() { return Iterator(byte_, 7); }
     // Returns a reference to the MSB.
-    ReverseIterator rend() { return ReverseIterator(byte_, -1); }
+    ReverseIterator rbegin() { return ReverseIterator(byte_, 0); }
+    // Returns a reference to the MSB.
+    Iterator end() { return Iterator(byte_, -1); }
+    // Returns a reference to the MSB.
+    ReverseIterator rend() { return ReverseIterator(byte_, 8); }
     // Performs bitwise AND operation between two `Byte` objects.
     Byte operator&(const Byte& data) const;
     // Performs bitwise AND operation on current `Byte` object.
