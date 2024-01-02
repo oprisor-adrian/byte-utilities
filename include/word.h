@@ -29,13 +29,9 @@
 #include <regex>
 
 #include "byte.h"
+#include "byte_utils.h"
 
 namespace ByteUtils {
-
-// Rounds up to nearest byte.
-constexpr std::size_t RoundUp(std::size_t bits) {
-  return (bits + 7) / 8;
-}
 
 template<std::size_t bits>
 class Word;
@@ -44,13 +40,12 @@ template<std::size_t bits>
 std::ostream& operator<<(std::ostream& stream, const Word<bits>& data);
 
 // The `Word` class manage and performs bitwise operations on 
-// 'N' bits of data, treated as a single entity, and stored in 
+// 'N' bytes of data, treated as a single entity, and formatted in 
 // little-endian order.
 // Example:
 //    ByteUtils::Word word1("ffffffff");
 //    ByteUtils::Word word2("0a0a0a0a");
-//    ByteUtils::Word result = word1 ^ word2;
-//    std::cout << result;
+//    std::cout << word1 + word2;
 template<std::size_t bits>
 class Word {
   public:
@@ -58,7 +53,7 @@ class Word {
     // to traverse a `Word` instance.
     class Iterator {
       public:
-        Iterator(std::array<Byte, RoundUp(bits)>& word, std::size_t index)
+        Iterator(std::array<Byte, detail::RoundUp(bits)>& word, std::size_t index)
             : word_(&word), index_(index) {}
         // Move the index towards LSB. 
         inline Iterator& operator++() { ++index_; return *this; }
@@ -72,14 +67,14 @@ class Word {
           return word_ != other.word_ || index_ != other.index_; 
         }
       private:
-        std::array<Byte, RoundUp(bits)>* word_;
+        std::array<Byte, detail::RoundUp(bits)>* word_;
         std::size_t index_;
     };
     // The class `ConstIterator` provides a mechanism
     // to travers a `const Word` instance.
     class ConstIterator {
       public:
-        ConstIterator(const std::array<Byte, RoundUp(bits)>& word, 
+        ConstIterator(const std::array<Byte, detail::RoundUp(bits)>& word, 
                       std::size_t index)
             : word_(&word), index_(index) {}
         // Move the index towards LSB. 
@@ -94,14 +89,14 @@ class Word {
           return word_ != other.word_ || index_ != other.index_; 
         }
       private:
-        const std::array<Byte, RoundUp(bits)>* word_;
+        const std::array<Byte, detail::RoundUp(bits)>* word_;
         std::size_t index_;
     };
     // The class `ReverseIterator` provides a mechanism 
     // to traverse a `Word` instance in reverse order.
     class ReverseIterator {
       public:
-        ReverseIterator(std::array<Byte, RoundUp(bits)>& word, 
+        ReverseIterator(std::array<Byte, detail::RoundUp(bits)>& word, 
                         std::size_t index)
             : word_(&word), index_(index) {}
         // Move the index towards MSB. 
@@ -116,14 +111,14 @@ class Word {
           return word_ != other.word_ || index_ != other.index_; 
         }
       private:
-        std::array<Byte, RoundUp(bits)>* word_;
+        std::array<Byte, detail::RoundUp(bits)>* word_;
         std::size_t index_;
     };
     // The class `ConstReverseIterator` provides a mechanism
     // to travers a `const Word` instance in reverse order.
     class ConstReverseIterator {
       public:
-         ConstReverseIterator(const std::array<Byte, RoundUp(bits)>& word, 
+         ConstReverseIterator(const std::array<Byte, detail::RoundUp(bits)>& word, 
                               std::size_t index)
             : word_(&word), index_(index) {}
         // Move the index towards MSB. 
@@ -138,19 +133,16 @@ class Word {
           return word_ != other.word_ || index_ != other.index_; 
         }
       private:
-        const std::array<Byte, RoundUp(bits)>* word_;
+        const std::array<Byte, detail::RoundUp(bits)>* word_;
         std::size_t index_;
     };
     Word() = default;
-    // Creates a `Word` object from a hexadecimal string, 
-    // in little-endian order.
+    // Creates a `Word` object from a hexadecimal string.
     Word(const std::string& hex_string);
-    // Creates a `Word` object from given `unsigned long long` data,
-    // in little-endian order.
+    // Creates a `Word` object from given `unsigned long long` data.
     Word(std::uint64_t data);
-    // Initializes the `Word` object with an array of `Byte` objects,
-    // in little-endian order.
-    Word(const std::array<Byte, RoundUp(bits)>& word);
+    // Initializes the `Word` object with an array of `Byte` objects.
+    Word(const std::array<Byte, detail::RoundUp(bits)>& word);
     Word(const Word& other) = default;
     Word(Word&& other) = default;
     Word& operator=(const Word& other) = default;
@@ -209,13 +201,13 @@ class Word {
     std::string ToHex() const;
     // Returns the size of `Word` object in bytes.
     inline const std::size_t GetSize() const { return word_.size(); }
-    inline const std::array<Byte, RoundUp(bits)>& GetWord() const { return word_; }
+    inline const std::array<Byte, detail::RoundUp(bits)>& GetWord() const { return word_; }
   private:
     void CheckValidity(const std::string& hex_string) const;
     std::string PrepareHexString(std::string hex_string) const;
-    std::array<Byte, RoundUp(bits)> ParseHexString(
+    std::array<Byte, detail::RoundUp(bits)> ParseHexString(
         const std::string& hex_string) const;
-    std::array<Byte, RoundUp(bits)> word_;
+    std::array<Byte, detail::RoundUp(bits)> word_;
 };
 
 template<std::size_t bits>
@@ -226,11 +218,11 @@ Word<bits>::Word(const std::string& hex_string) {
 }
 
 template<std::size_t bits>
-Word<bits>::Word(const std::array<Byte, RoundUp(bits)>& word): word_(word) {}
+Word<bits>::Word(const std::array<Byte, detail::RoundUp(bits)>& word): word_(word) {}
 
 template<std::size_t bits>
 Word<bits>::Word(std::uint64_t decimal_value) {
-  std::size_t word_size = RoundUp(bits);
+  std::size_t word_size = detail::RoundUp(bits);
   auto begin = reinterpret_cast<std::uint8_t*>(&decimal_value);
   auto end = reinterpret_cast<std::uint8_t*>(&decimal_value) + word_size;
   std::reverse_copy(begin, end, word_.begin());
@@ -246,7 +238,7 @@ std::ostream& operator<<(std::ostream& stream, const Word<bits>& data) {
 
 template<std::size_t bits>
 Word<bits> Word<bits>::operator^(const Word& other) const {
-  std::array<Byte, RoundUp(bits)> result;
+  std::array<Byte, detail::RoundUp(bits)> result;
   for (std::size_t index = 0; index < word_.size(); index++) {
     result[index] = word_[index] ^ other.word_[index];
   }
@@ -255,7 +247,7 @@ Word<bits> Word<bits>::operator^(const Word& other) const {
 
 template<std::size_t bits>
 Word<bits> Word<bits>::operator^(const Byte& byte) const {
-  std::array<Byte, RoundUp(bits)> result;
+  std::array<Byte, detail::RoundUp(bits)> result;
   for (std::size_t index = 0; index < word_.size(); index++) {
     result[index] = word_[index] ^ byte;
   }
@@ -264,7 +256,7 @@ Word<bits> Word<bits>::operator^(const Byte& byte) const {
 
 template<std::size_t bits>
 Word<bits> Word<bits>::operator&(const Word& other) const {
-  std::array<Byte, RoundUp(bits)> result;
+  std::array<Byte, detail::RoundUp(bits)> result;
   for (std::size_t index = 0; index < word_.size(); index++) {
     result[index] = word_[index] & other.word_[index];
   }
@@ -273,7 +265,7 @@ Word<bits> Word<bits>::operator&(const Word& other) const {
 
 template<std::size_t bits>
 Word<bits> Word<bits>::operator|(const Word& other) const {
-  std::array<Byte, RoundUp(bits)> result;
+  std::array<Byte, detail::RoundUp(bits)> result;
   for (std::size_t index = 0; index < word_.size(); index++) {
     result[index] = word_[index] | other.word_[index];
   }
@@ -294,7 +286,7 @@ Word<bits> Word<bits>::operator+(const Word& other) const {
 
 template<std::size_t bits>
 Word<bits> Word<bits>::operator~() const {
-  std::array<Byte, RoundUp(bits)> result;
+  std::array<Byte, detail::RoundUp(bits)> result;
   for (std::size_t index = 0; index < word_.size(); index++) {
     result[index] = ~word_[index];
   }
@@ -343,7 +335,7 @@ Word<bits> Word<bits>::operator>>(std::size_t n_pos) const {
 
 template<std::size_t bits>
 Byte Word<bits>::operator[](const std::size_t pos) const {
-  if (pos > RoundUp(bits) - 1) {
+  if (pos > detail::RoundUp(bits) - 1) {
     throw std::out_of_range("The position `pos` is out of range.");
   }
   return word_[pos];
@@ -351,7 +343,7 @@ Byte Word<bits>::operator[](const std::size_t pos) const {
 
 template<std::size_t bits>
 Byte& Word<bits>::operator[](const std::size_t pos) {
-  if (pos > RoundUp(bits) - 1) {
+  if (pos > detail::RoundUp(bits) - 1) {
     throw std::out_of_range("The position `pos` is out of range.");
   }
   return word_[pos];
@@ -377,7 +369,7 @@ template<std::size_t bits>
 std::string Word<bits>::PrepareHexString(std::string hex_string) const {
   // Round up to nearest byte.
   std::size_t bytes_2_represent = (hex_string.length() * 4 + 7 ) / 8;
-  std::size_t word_size = RoundUp(bits);
+  std::size_t word_size = detail::RoundUp(bits);
   // Truncates the %hex_string if is exceeded the size of the word.
   if (word_size < bytes_2_represent) {
     std::cerr << "Input exceeds " << word_size << " bytes. Truncation will be "
@@ -394,10 +386,10 @@ std::string Word<bits>::PrepareHexString(std::string hex_string) const {
 }
 
 template<std::size_t bits>
-std::array<Byte, RoundUp(bits)> Word<bits>::ParseHexString(
+std::array<Byte, detail::RoundUp(bits)> Word<bits>::ParseHexString(
     const std::string& hex_string) const {
   // Rounds up to nearest byte.
-  std::size_t word_size = RoundUp(bits);
+  std::size_t word_size = detail::RoundUp(bits);
   std::size_t bytes_2_represent = (hex_string.length() * 4 + 7 ) / 8;
   // Matchs each two hexadecimal characters.
   std::regex hex_regex("[0-9a-fA-F]{2}");
@@ -405,7 +397,7 @@ std::array<Byte, RoundUp(bits)> Word<bits>::ParseHexString(
                                     hex_string.end(), 
                                     hex_regex);
   auto end = std::sregex_iterator();
-  std::array<Byte, RoundUp(bits)> word;
+  std::array<Byte, detail::RoundUp(bits)> word;
   auto inserter = word.begin() + (word_size - bytes_2_represent);
   // Parses the hexadecimal values to `Byte` objects.
   std::for_each(begin, end, [&inserter](const std::smatch& match) {

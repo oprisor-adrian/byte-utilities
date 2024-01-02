@@ -196,7 +196,7 @@ Word<bits> ByteVector::GetWord(std::size_t pos) const {
     throw std::out_of_range("The position `pos` is out of range.");
   }
   Word<bits> word;
-  std::size_t bytes_2_get = RoundUp(bits);
+  std::size_t bytes_2_get = detail::RoundUp(bits);
   auto begin = bytes_.begin()+pos*4;
   auto end = bytes_.begin()+pos*4+4;
   std::size_t index = 0;

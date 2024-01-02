@@ -70,7 +70,7 @@ void ByteVector::PushBack(const Byte& byte) {
 }
 
 ByteVector ByteVector::Subvector(std::size_t pos, 
-                                        std::size_t count) const {
+                                 std::size_t count) const {
   if (pos + count > bytes_.size()) {
     throw std::out_of_range("Exceeded the vector size.");
   }
