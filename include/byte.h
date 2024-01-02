@@ -35,7 +35,7 @@ enum class Base {
 
 // The `Byte` class manage and performs bitwise operations on 
 // an array of 8 bits. The class do not handle representation
-// of negative values. The bits are ordered in little-endian format.
+// of negative values. The bits are formatted in little-endian order.
 // Example:
 //     ByteUtils::Byte byte1(0x57);
 //     ByteUtils::Byte byte2("11101101", ByteUtils::Base:base_2);
@@ -83,14 +83,15 @@ class Byte {
     Byte(const std::bitset<8>& byte);
     // Creates a `Byte` object that represents 8 bits of `unsigned data`.
     Byte(const std::uint8_t data);
-    // Creates a `Byte` object from a plain text in a given `base`.
+    // Creates a `Byte` object from input data formatted in big-endian order.
     Byte(const std::string& data, const Base& base);
     Byte(const Byte& other) = default;
     Byte(Byte&& other) = default;
     Byte& operator=(const Byte& other) = default;
     Byte& operator=(Byte&& other) = default;
     ~Byte() = default;
-    // Prints the `Byte` object as an array of bits from the MSB to LSB.
+    // Prints the `Byte` object as an array of bits formatted 
+    // in big-endian order.
     friend std::ostream& operator<<(std::ostream& stream, const Byte& data);
     // Prints the reference to a bit.
     friend std::ostream& operator<<(std::ostream& stream,
@@ -101,7 +102,7 @@ class Byte {
     ReverseIterator rbegin() { return ReverseIterator(byte_, 0); }
     // Returns a reference to the MSB.
     Iterator end() { return Iterator(byte_, -1); }
-    // Returns a reference to the MSB.
+    // Returns a reference to the LSB.
     ReverseIterator rend() { return ReverseIterator(byte_, 8); }
     // Performs bitwise AND operation between two `Byte` objects.
     Byte operator&(const Byte& data) const;
